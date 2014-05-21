@@ -44,3 +44,6 @@ To use a permanent storage, see the Configuration section below.
 
 Configuration
 ===================
+
+See Installation, copy properties into config_override.
+
