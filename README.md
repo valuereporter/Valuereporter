@@ -15,7 +15,23 @@ In the near future, Value reporter will also be able to:
 Installation
 ===================
 
-java -jar Valuereporter-with-deps.jar
+* Copy Proprerties file
+```
+mkdir config_override
+cp src/main/resources/valuereporter.properties config_override/
+```
+* Edit valuereporter.properties to suite your environment.
+
+* Create database. Use sql resources\db\initialize_new_database.sql
+** The updates to the database will be managed by Flyway
+
+
+Running Valuereporter
+===================
+
+```
+java -jar target/valuereporter-0.1-SNAPSHOT-with-deps.jar
+```
 
 Database
 ===================
