@@ -1,7 +1,5 @@
 package org.valuereporter;
 
-import org.valuereporter.helper.DatabaseMigrationHelper;
-import org.valuereporter.helper.StatusType;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.NCSARequestLog;
 import org.eclipse.jetty.server.Server;
@@ -13,6 +11,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
+import org.valuereporter.helper.DatabaseMigrationHelper;
+import org.valuereporter.helper.StatusType;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -87,8 +87,8 @@ public class Main {
         String httpPort = resoruces.getProperty("jetty.http.port");
 
         if (httpPort == null || httpPort.length() == 0) {
-            log.error("Missing property 'jetty.http.port', can not start the application.");
-            throw new ValuereporterTechnicalException("Missing property 'jetty.http.port', can not start the application.", StatusType.RETRY_NOT_POSSIBLE);
+            log.info("jetty.http.port missing. Will use default port {}", DEFAULT_PORT_NO);
+            retPort = DEFAULT_PORT_NO;
         } else {
             try {
                retPort = new Integer(httpPort).intValue();
