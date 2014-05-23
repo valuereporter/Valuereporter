@@ -12,10 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.valuereporter.helper.DatabaseMigrationHelper;
+import org.valuereporter.helper.EmbeddedDatabaseHelper;
 import org.valuereporter.helper.StatusType;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.BindException;
 import java.net.URL;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -43,8 +46,8 @@ public class Main {
             main.start();
             main.join();
         } catch (ValuereporterException e) {
-            log.error("Failed to start the server. " + e.getMessage());
-            main.stop();
+            log.error("Failed to start the server. Reason {}. Port {} ", e.getMessage(), main.getPortNumber());
+            main.stopOnError();
         }
 
         /*
@@ -70,7 +73,10 @@ public class Main {
         Properties resources = findProperties();
 
         try{
-            new DatabaseMigrationHelper(resources).upgradeDatabase();
+            new EmbeddedDatabaseHelper(resources).initializeDatabase();
+            if (useLocalDatabase(resources)) {
+                new DatabaseMigrationHelper(resources).upgradeDatabase();
+            }
             jettyPort = findHttpPort(resources);
         } catch (ValuereporterException tde) {
             log.error("Could not initalize the service. Exiting. ", tde);
@@ -82,6 +88,13 @@ public class Main {
         URL url = ClassLoader.getSystemResource("webapp/WEB-INF/web.xml");
         resourceBase = url.toExternalForm().replace("/WEB-INF/web.xml", "");
     }
+
+    private boolean useLocalDatabase(Properties resources) {
+        boolean useEmbedded = EmbeddedDatabaseHelper.useEmbeddedDb(resources);
+        boolean useLocal = !useEmbedded;
+        return useLocal;
+    }
+
     protected static int findHttpPort(Properties resoruces) throws ValuereporterException {
         int retPort = -1;
         String httpPort = resoruces.getProperty("jetty.http.port");
@@ -117,7 +130,10 @@ public class Main {
         handlers.setHandlers(new Handler[]{context,new DefaultHandler(),requestLogHandler});
         server.setHandler(handlers);
 
-        NCSARequestLog requestLog = new NCSARequestLog("./logs/jetty-yyyy_mm_dd.request.log");
+
+        String logDir = "./logs";
+        ensureLogDirexist(logDir);
+        NCSARequestLog requestLog = new NCSARequestLog(logDir + "/jetty-yyyy_mm_dd.request.log");
         requestLog.setRetainDays(90);
         requestLog.setAppend(true);
         requestLog.setExtended(false);
@@ -145,6 +161,8 @@ public class Main {
         */
         try {
             server.start();
+        } catch (BindException be) {
+            throw new ValuereporterException("Failed to start the server. Ther port is already in use.", StatusType.RETRY_NOT_POSSIBLE);
         } catch (Exception e) {
             throw new ValuereporterException("Failed to start." ,e, StatusType.RETRY_NOT_POSSIBLE);
         }
@@ -156,8 +174,16 @@ public class Main {
         log.info("Jetty server started on port {}, context path {}", localPort, CONTEXT_PATH);
     }
 
-    public void stop() throws Exception {
+    private void ensureLogDirexist(String logDirPath) {
+        File logDir = new File(logDirPath);
+        if (!logDir.exists()) {
+            logDir.mkdir();
+        }
+    }
+
+    public void stopOnError() throws Exception {
         server.stop();
+        System.exit(1);
     }
 
     public void join() throws InterruptedException {
@@ -196,7 +222,7 @@ public class Main {
         FileReader classpathFile = findPropertiesFile(classpathFileName);
         FileReader overrideFile = findPropertiesFile(overrideFileName);
         if (overrideFile == null && classpathFile == null) {
-            throw new ValuereporterException("Failed to load properties. Neither " + classpathFile + " nor " +overrideFile +" were found.",StatusType.RETRY_NOT_POSSIBLE );
+            throw new ValuereporterException("Failed to load properties. Neither " + classpathFileName + " nor " +overrideFileName +" were found.",StatusType.RETRY_NOT_POSSIBLE );
         }
         try {
             if (classpathFile != null) {
