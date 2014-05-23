@@ -68,11 +68,8 @@ public class ObservationDao {
 
     }
     public List<ObservedMethod> findObservedMethods(String prefix, String name) {
-//        String sql = "SELECT * FROM ObservedMethod WHERE prefix = ? and methodName = ?";
-        String sql = "SELECT prefix,methodName, startTime, endTime, duration  FROM ObservedMethod WHERE  methodName = ?";
-//       String sql = "SELECT * FROM ObservedMethod WHERE prefix = '" + prefix + "' and methodName = '" + name +"'";
-//        List<ObservedMethod> observedMethods = jdbcTemplate.queryForList(sql, ObservedMethod.class, prefix, name);
-        Object[] parameters = new Object[] {name};
+        String sql = "SELECT prefix,methodName, startTime, endTime, duration  FROM ObservedMethod WHERE prefix = ? AND methodName = ?";
+        Object[] parameters = new Object[] {prefix,name};
         List<ObservedMethod> observedMethods = jdbcTemplate.query(sql, parameters, new RowMapper<ObservedMethod>() {
             @Override
             public ObservedMethod mapRow(ResultSet resultSet, int i) throws SQLException {
