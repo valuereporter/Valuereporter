@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -105,8 +105,8 @@ public class ObservationDao {
                 ObservedMethod observedMethod = observedMethods.get(i);
                 ps.setString(1,prefix);
                 ps.setString(2, observedMethod.getName());
-                ps.setTime(3, new Time(observedMethod.getStartTime()));
-                ps.setTime(4, new Time(observedMethod.getEndTime()));
+                ps.setTimestamp(3, new Timestamp(observedMethod.getStartTime()));
+                ps.setTimestamp(4, new Timestamp(observedMethod.getEndTime()));
                 ps.setLong(5, observedMethod.getDuration());
 
             }

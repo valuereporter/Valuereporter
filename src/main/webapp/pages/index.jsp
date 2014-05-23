@@ -13,8 +13,8 @@
     <h3>Observations</h3>
     <li><a href="./observe/observedmethods/{prefix}/{name}">template listing of operations (./observe/observedmethods/{prefix}/{name})</a></li>
     <b>receipt-control-test</b>
-    <li><a href="./observe/observedmethods/template-prefix/org.valuereporter.welcome.ping">Ping</a>
-    <li><a href="./observe/observedmethods/template-prefix/org.valuereporter.welcome.hello">Helo</a>
+    <li><a href="./observe/observedmethods/template-prefix/org.valuereporter.Welcome.ping">Ping</a>
+    <li><a href="./observe/observedmethods/template-prefix/org.valuereporter.Welcome.hello">Helo</a>
 
     <h3>SLA</h3>
    <li>SLA reporting: <a href="./sla/responsetimes.jsp">SLA reporting on responsetimes.</a></li>
