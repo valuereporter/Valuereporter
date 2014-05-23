@@ -25,7 +25,7 @@
 
 
                 var plot2 = $.jqplot('chart2', [line1], {
-                    title:'Customized Date Axis',
+                    title:'org.valuereporter.Welcome.ping',
                     gridPadding:{right:35},
                     axes:{
                         xaxis:{
@@ -49,7 +49,7 @@
     </script>
 </head>
 <body>
-<h2>Being Java Guys | Hello World</h2>
+<h2>Live graph</h2>
 <h4>${message}</h4>
 <div id="chart2" style="height:300px; width:500px;"></div>
 </body>
