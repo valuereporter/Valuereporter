@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
+ * Setting up the embedding database. Hsqldb.
  * See http://hsqldb.org/doc/guide/running-chapt.html#rgc_new_db
  * @author <a href="bard.lind@gmail.com">Bard Lind</a>
  */

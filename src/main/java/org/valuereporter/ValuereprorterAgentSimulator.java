@@ -3,6 +3,7 @@ package org.valuereporter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.valuereporter.helper.PropertiesHelper;
 import org.valuereporter.observation.ObservedMethod;
 
 import javax.ws.rs.client.Client;
@@ -32,8 +33,8 @@ public class ValuereprorterAgentSimulator {
     private static final int STATUS_FORBIDDEN = 403;
 
     public ValuereprorterAgentSimulator() {
-        Properties resources = Main.findProperties();
-        port = Main.findHttpPort(resources);
+        Properties resources = PropertiesHelper.findProperties();
+        port = PropertiesHelper.findHttpPort(resources);
         Client client = ClientBuilder.newClient();
         String reporterHost = DEFAULT_REPORTER_HOST;
         String observationUrl = "http://"+reporterHost + ":" + port +"/reporter/observe";
