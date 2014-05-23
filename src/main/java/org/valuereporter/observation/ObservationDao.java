@@ -21,6 +21,7 @@ import java.util.List;
 @Component
 public class ObservationDao {
     private static final Logger log = LoggerFactory.getLogger(ObservationDao.class);
+    private static final String MAX_RESULTS = "1000";
     private static String usernameSql = "SELECT  id FROM UserTable where username = ?";
     private static String emailSql = "SELECT  id FROM UserTable where email = ?";
     private static String phoneSql = "SELECT  id FROM UserTable where phone = ?";
@@ -68,7 +69,8 @@ public class ObservationDao {
 
     }
     public List<ObservedMethod> findObservedMethods(String prefix, String name) {
-        String sql = "SELECT prefix,methodName, startTime, endTime, duration  FROM ObservedMethod WHERE prefix = ? AND methodName = ?";
+
+        String sql = "SELECT TOP " + MAX_RESULTS + " prefix,methodName, startTime, endTime, duration  FROM ObservedMethod WHERE prefix = ? AND methodName = ? ORDER BY endTime DESC ";
         Object[] parameters = new Object[] {prefix,name};
         List<ObservedMethod> observedMethods = jdbcTemplate.query(sql, parameters, new RowMapper<ObservedMethod>() {
             @Override
