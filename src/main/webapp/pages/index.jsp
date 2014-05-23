@@ -17,7 +17,7 @@
     <li><a href="./observe/observedmethods/template-prefix/org.valuereporter.Welcome.hello">Helo</a>
 
     <h3>SLA</h3>
-   <li>SLA reporting: <a href="./sla/responsetimes.jsp">SLA reporting on responsetimes.</a></li>
+   <li>SLA reporting: <a href="./pages/welcome-sla.jsp">SLA reporting on Welcome.ping</a></li>
 
 </body>
 </html>
