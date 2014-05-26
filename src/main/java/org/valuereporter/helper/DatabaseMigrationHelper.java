@@ -1,7 +1,5 @@
 package org.valuereporter.helper;
 
-import org.valuereporter.ValuereporterException;
-import org.valuereporter.ValuereporterTechnicalException;
 import net.sourceforge.jtds.jdbcx.JtdsDataSource;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
@@ -9,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+import org.valuereporter.ValuereporterException;
+import org.valuereporter.ValuereporterTechnicalException;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -38,7 +38,7 @@ public class DatabaseMigrationHelper {
         try {
             flyway.migrate();
         } catch (FlywayException e) {
-            throw new RuntimeException("Database upgrade failed.", e);
+            throw new ValuereporterTechnicalException("Database upgrade failed.", e,StatusType.RETRY_NOT_POSSIBLE);
         }
     }
 

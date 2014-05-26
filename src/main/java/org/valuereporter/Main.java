@@ -45,6 +45,9 @@ public class Main {
         } catch (ValuereporterException tde) {
             log.error("Could not initalize the service. Exiting. ", tde);
             System.exit(0);
+        } catch (Exception e) {
+            log.error("Unexpected error. Exiting. ", e);
+            System.exit(0);
         }
 
         server = new Server(jettyPort);
