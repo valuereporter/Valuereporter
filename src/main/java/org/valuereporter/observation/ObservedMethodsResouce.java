@@ -99,9 +99,10 @@ public class ObservedMethodsResouce {
         }
 
         long updatedCount = writeOperations.addObservations(prefix,observedMethods);
+        String message =  "added " + updatedCount + " observedMethods.";
         Writer strWriter = new StringWriter();
         try {
-            mapper.writeValue(strWriter, updatedCount);
+            mapper.writeValue(strWriter, message);
         } catch (IOException e) {
             log.error("Could not convert {} to JSON.", updatedCount, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error converting to requested format.").build();
