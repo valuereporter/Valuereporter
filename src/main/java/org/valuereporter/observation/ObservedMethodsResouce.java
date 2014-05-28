@@ -2,12 +2,12 @@ package org.valuereporter.observation;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.valuereporter.QueryOperations;
-import org.valuereporter.WriteOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.valuereporter.QueryOperations;
+import org.valuereporter.WriteOperations;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -85,7 +85,7 @@ public class ObservedMethodsResouce {
     @Path("/{prefix}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response addObservationMethod(@PathParam("prefix") String prefix, String jsonBody){
-        log.trace("addMachine. storeId {}, name {}, machineSerial {}, storeInternalMachineId {}.", prefix, jsonBody);
+        log.trace("addObservationMethod prefix {} , jsonBody {}.", prefix, jsonBody);
         List<ObservedMethod> observedMethods = null;
         try {
             observedMethods = mapper.readValue(jsonBody, new TypeReference<ArrayList<ObservedMethodJson>>(){ });
