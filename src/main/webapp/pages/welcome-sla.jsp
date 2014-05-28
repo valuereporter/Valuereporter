@@ -13,7 +13,6 @@
             var line1=[];
             $.getJSON(uptime_vs_in_use_url,  function(data) {
                 console.info("data:" + data[0].name);
-                console.log("data:" + data[1].name);
                 var uptimeData = [];
                 var inUseData = [];
                 data.forEach(function(entryvalue){
