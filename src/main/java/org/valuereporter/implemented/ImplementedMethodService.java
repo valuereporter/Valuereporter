@@ -34,6 +34,11 @@ public class ImplementedMethodService implements QueryOperations, WriteOperation
 
     @Override
     public long addImplementedMethods(String prefix, List<ImplementedMethod> implementedMethods) {
-        return 0;
+        long size = 0;
+        if (implementedMethods != null) {
+            implementedMethodDao.addAll(prefix,implementedMethods);
+            size = implementedMethods.size();
+        }
+        return size;
     }
 }

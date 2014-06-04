@@ -68,6 +68,37 @@ public class ImplementedMethodResource {
     }
 
     //http://localhost:4901/reporter/observe/implementedmethod/{prefix}
+    /**
+     * A request with no filtering parameters should return a list of all ImplementedMethods.
+     *
+     * @param prefix prefix used to identify running process
+     * @return  List of ImplementedMethods
+     */
+    @GET
+    @Path("/{prefix}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findImplementedMethodsPrefix(@PathParam("prefix") String prefix) {
+        final List<ImplementedMethod> implementedMethods;
+
+        //Should also support no queryParams -> findAll
+        if (prefix != null ) {
+            log.trace("findImplementedMethodsByPrefix prefix={}", prefix);
+            implementedMethods = queryOperations.findImplementdedMethods(prefix, null);
+        } else {
+            throw new UnsupportedOperationException("You must supply a prefix.");
+        }
+
+        Writer strWriter = new StringWriter();
+        try {
+            mapper.writeValue(strWriter, implementedMethods);
+        } catch (IOException e) {
+            log.error("Could not convert {} ObservedMethod to JSON.", implementedMethods.size(), e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error converting to requested format.").build();
+        }
+        return Response.ok(strWriter.toString()).build();
+    }
+
+    //http://localhost:4901/reporter/observe/implementedmethod/{prefix}
     @POST
     @Path("/{prefix}")
     @Produces(MediaType.APPLICATION_JSON)

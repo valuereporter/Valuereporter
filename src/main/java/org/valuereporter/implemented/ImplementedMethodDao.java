@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * @author <a href="bard.lind@gmail.com">Bard Lind</a>
  */
+@Component
 public class ImplementedMethodDao {
     private static final Logger log = LoggerFactory.getLogger(ImplementedMethodDao.class);
 
@@ -62,7 +64,7 @@ public class ImplementedMethodDao {
 
     public void addAll(final String prefix, final List<ImplementedMethod> implementedMethods) {
         String sql = "INSERT INTO "
-                + "IplemntedMethod "
+                + "ImplementedMethod "
                 + "(prefix,methodName) "
                 + "VALUES " + "(?,?)";
 
