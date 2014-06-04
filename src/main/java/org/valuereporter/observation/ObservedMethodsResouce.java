@@ -80,7 +80,7 @@ public class ObservedMethodsResouce {
         return Response.ok(strWriter.toString()).build();
     }
 
-    //http://localhost:4901/reporter/observedmethod/{prefix}
+    //http://localhost:4901/reporter/observedmethods/{prefix}
     @POST
     @Path("/{prefix}")
     @Produces(MediaType.APPLICATION_JSON)
