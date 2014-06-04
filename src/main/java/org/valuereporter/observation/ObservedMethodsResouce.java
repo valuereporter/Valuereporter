@@ -48,7 +48,7 @@ public class ObservedMethodsResouce {
 
 
 
-    //http://localhost:4901/reporter/observedmethods/{prefix}/{name}
+    //http://localhost:4901/reporter/observe/observedmethods/{prefix}/{name}
     /**
      * A request with no filtering parameters should return a list of all observations.
      *
@@ -80,7 +80,7 @@ public class ObservedMethodsResouce {
         return Response.ok(strWriter.toString()).build();
     }
 
-    //http://localhost:4901/reporter/observedmethods/{prefix}
+    //http://localhost:4901/reporter/observe/observedmethods/{prefix}
     @POST
     @Path("/{prefix}")
     @Produces(MediaType.APPLICATION_JSON)
