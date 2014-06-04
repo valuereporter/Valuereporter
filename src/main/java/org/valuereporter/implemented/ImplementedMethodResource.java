@@ -52,7 +52,7 @@ public class ImplementedMethodResource {
         //Should also support no queryParams -> findAll
         if (name != null ) {
             log.trace("findImplementedMethodsByName name={}", name);
-            implementedMethods = queryOperations.findImplementdedMethodsByName(prefix, name);
+            implementedMethods = queryOperations.findImplementdedMethods(prefix, name);
         } else {
             throw new UnsupportedOperationException("You must supply a name. <package.classname.method>");
         }
