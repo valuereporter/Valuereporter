@@ -3,12 +3,11 @@ package org.valuereporter.implemented;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -62,30 +61,22 @@ public class ImplementedMethodDao {
 
 
 
-    public void addAll(final String prefix, final List<ImplementedMethod> implementedMethods) {
+    public int addAll(final List<ImplementedMethod> implementedMethods) {
         String sql = "INSERT INTO "
                 + "ImplementedMethod "
                 + "(prefix,methodName) "
                 + "VALUES " + "(?,?)";
 
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-
-            @Override
-            public void setValues(PreparedStatement ps, int i)
-                    throws SQLException {
-
-                ImplementedMethod observedMethod = implementedMethods.get(i);
-                ps.setString(1,prefix);
-                ps.setString(2, observedMethod.getName());
-
+        int inserted = 0;
+        for (ImplementedMethod implementedMethod : implementedMethods) {
+            try {
+                jdbcTemplate.update(sql, implementedMethod.getPrefix(), implementedMethod.getPrefix());
+                inserted ++;
+            } catch (DuplicateKeyException dke) {
+                //do nothing
+                log.trace("Ignored exception. ", dke.getMessage());
             }
-
-            @Override
-            public int getBatchSize() {
-                return implementedMethods.size();
-            }
-        });
-
-
+        }
+        return inserted;
     }
 }

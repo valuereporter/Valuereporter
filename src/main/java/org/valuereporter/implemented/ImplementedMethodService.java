@@ -22,7 +22,7 @@ public class ImplementedMethodService implements QueryOperations, WriteOperation
     }
 
     @Override
-    public List<ImplementedMethod> findImplementdedMethods(String prefix, String name) {
+    public List<ImplementedMethod> findImplementedMethods(String prefix, String name) {
         List<ImplementedMethod> implementedMethods = new ArrayList<>();
         if (prefix != null && name != null) {
             implementedMethods = implementedMethodDao.findImplementedMethods(prefix,name);
@@ -33,11 +33,10 @@ public class ImplementedMethodService implements QueryOperations, WriteOperation
     }
 
     @Override
-    public long addImplementedMethods(String prefix, List<ImplementedMethod> implementedMethods) {
+    public long addImplementedMethods(List<ImplementedMethod> implementedMethods) {
         long size = 0;
         if (implementedMethods != null) {
-            implementedMethodDao.addAll(prefix,implementedMethods);
-            size = implementedMethods.size();
+            size = implementedMethodDao.addAll(implementedMethods);
         }
         return size;
     }

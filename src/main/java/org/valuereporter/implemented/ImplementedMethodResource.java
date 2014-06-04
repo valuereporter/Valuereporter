@@ -52,7 +52,7 @@ public class ImplementedMethodResource {
         //Should also support no queryParams -> findAll
         if (name != null ) {
             log.trace("findImplementedMethodsByName name={}", name);
-            implementedMethods = queryOperations.findImplementdedMethods(prefix, name);
+            implementedMethods = queryOperations.findImplementedMethods(prefix, name);
         } else {
             throw new UnsupportedOperationException("You must supply a name. <package.classname.method>");
         }
@@ -83,7 +83,7 @@ public class ImplementedMethodResource {
         //Should also support no queryParams -> findAll
         if (prefix != null ) {
             log.trace("findImplementedMethodsByPrefix prefix={}", prefix);
-            implementedMethods = queryOperations.findImplementdedMethods(prefix, null);
+            implementedMethods = queryOperations.findImplementedMethods(prefix, null);
         } else {
             throw new UnsupportedOperationException("You must supply a prefix.");
         }
@@ -116,7 +116,7 @@ public class ImplementedMethodResource {
             e.printStackTrace();
         }
 
-        long updatedCount = writeOperations.addImplementedMethods(prefix,implementedMethods);
+        long updatedCount = writeOperations.addImplementedMethods(implementedMethods);
         String message =  "added " + updatedCount + " implementedMethods.";
         Writer strWriter = new StringWriter();
         try {

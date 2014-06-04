@@ -6,5 +6,5 @@ import java.util.List;
  * @author <a href="bard.lind@gmail.com">Bard Lind</a>
  */
 public interface QueryOperations {
-    List<ImplementedMethod> findImplementdedMethods(String prefix, String name);
+    List<ImplementedMethod> findImplementedMethods(String prefix, String name);
 }
