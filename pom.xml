@@ -3,7 +3,7 @@
 
     <groupId>org.valuereporter</groupId>
     <artifactId>valuereporter</artifactId>
-    <version>0.3</version>
+    <version>0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>valuereporter</name>
@@ -33,7 +33,7 @@
         <developerConnection>scm:git:ssh://git@github.com/altran/Valuereporter.git</developerConnection>
         <connection>scm:git:https://github.com/altran/Valuereporter.git</connection>
         <url>https://github.com/altran/Valuereporter-Agent</url>
-        <tag>valuereporter-0.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <repositories>
