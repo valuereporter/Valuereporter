@@ -10,8 +10,8 @@ GO
 
 CREATE TABLE [dbo].[ImplementedMethod](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[prefix] [char](255) NOT NULL,
-	[methodName] [char](255) NOT NULL
+	[prefix] [varchar](255) NOT NULL,
+	[methodName] [varchar](255) NOT NULL
  CONSTRAINT [PK_ImplementedMethod] PRIMARY KEY CLUSTERED
 (
 	[id] ASC

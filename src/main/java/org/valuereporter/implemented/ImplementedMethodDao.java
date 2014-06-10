@@ -70,7 +70,8 @@ public class ImplementedMethodDao {
         int inserted = 0;
         for (ImplementedMethod implementedMethod : implementedMethods) {
             try {
-                jdbcTemplate.update(sql, implementedMethod.getPrefix(), implementedMethod.getPrefix());
+                log.debug("Insert {}, prefix {}, methodName {}", sql, implementedMethod.getPrefix(), implementedMethod.getName());
+                jdbcTemplate.update(sql, implementedMethod.getPrefix(), implementedMethod.getName());
                 inserted ++;
             } catch (DuplicateKeyException dke) {
                 //do nothing

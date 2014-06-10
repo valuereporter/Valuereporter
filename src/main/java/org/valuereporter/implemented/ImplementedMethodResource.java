@@ -92,7 +92,7 @@ public class ImplementedMethodResource {
         try {
             mapper.writeValue(strWriter, implementedMethods);
         } catch (IOException e) {
-            log.error("Could not convert {} ObservedMethod to JSON.", implementedMethods.size(), e);
+            log.error("Could not convert {} ImplementedMethod to JSON.", implementedMethods.size(), e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error converting to requested format.").build();
         }
         return Response.ok(strWriter.toString()).build();
@@ -118,6 +118,7 @@ public class ImplementedMethodResource {
 
         long updatedCount = writeOperations.addImplementedMethods(implementedMethods);
         String message =  "added " + updatedCount + " implementedMethods.";
+        log.trace("addImplementedMethod msg: {}",message);
         Writer strWriter = new StringWriter();
         try {
             mapper.writeValue(strWriter, message);
