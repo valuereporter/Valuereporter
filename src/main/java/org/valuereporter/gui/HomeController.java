@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
 
-    @RequestMapping("/")
+    @RequestMapping("/hello")
     public ModelAndView test() {
         String message = "Welcome to Spring 4.0 !";
         return new ModelAndView("hello", "message", message);
