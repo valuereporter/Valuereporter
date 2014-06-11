@@ -70,12 +70,12 @@ public class ObservationDao {
     }
     public List<ObservedMethod> findObservedMethods(String prefix, String name) {
 
-        String sql = "SELECT TOP " + MAX_RESULTS + " prefix,methodName, startTime, endTime, duration  FROM ObservedMethod WHERE prefix = ? AND methodName = ? ORDER BY endTime DESC ";
+        String sql = "SELECT TOP " + MAX_RESULTS + " prefix,methodName, startTime, endTime, duration  FROM ObservedMethod WHERE prefix = ? AND methodName = ? ORDER BY startTime ASC ";
         Object[] parameters = new Object[] {prefix,name};
         List<ObservedMethod> observedMethods = jdbcTemplate.query(sql, parameters, new RowMapper<ObservedMethod>() {
             @Override
             public ObservedMethod mapRow(ResultSet resultSet, int i) throws SQLException {
-                log.debug("Returned values: {},{},{},{},{}", resultSet.getObject(1),resultSet.getObject(2),resultSet.getObject(3),resultSet.getObject(4),resultSet.getObject(5));
+                //log.debug("Returned values: {},{},{},{},{}", resultSet.getObject(1),resultSet.getObject(2),resultSet.getObject(3),resultSet.getObject(4),resultSet.getObject(5));
 
                 ObservedMethod observedMethod = new ObservedMethod(
                         resultSet.getString(1),

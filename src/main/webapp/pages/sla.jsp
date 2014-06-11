@@ -30,9 +30,12 @@
                     axes:{
                         xaxis:{
                             renderer:$.jqplot.DateAxisRenderer,
-                            tickOptions:{formatString:'%H:%M:%S'}
+                            tickOptions:{formatString:'%#m/%#d %H:%M:%S'},
                             //min:'May 30, 2008',
-                            //tickInterval:'1 month'
+                            tickInterval:'1 hour'
+                        },
+                        yaxis: {
+                            label: "Responsetime (ms)"
                         }
                     },
                     highlighter: {
@@ -40,7 +43,8 @@
                         sizeAdjust: 7.5
                     },
                     cursor: {
-                        show: false
+                        show: true,
+                        zoom:true
                     },
                     series:[{lineWidth:4, markerOptions:{style:'square'}}]
                 });
