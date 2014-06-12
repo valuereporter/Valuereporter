@@ -70,7 +70,7 @@ public class ObservationDao {
     }
     public List<ObservedMethod> findObservedMethods(String prefix, String name) {
 
-        String sql = "SELECT TOP " + MAX_RESULTS + " prefix,methodName, startTime, endTime, duration  FROM ObservedMethod WHERE prefix = ? AND methodName = ? ORDER BY startTime ASC ";
+        String sql = "SELECT prefix,methodName, startTime, endTime, duration  FROM ObservedMethod WHERE prefix = ? AND methodName = ? AND startTime > DATEADD(week,-1,GETDATE() ) ORDER BY startTime ASC ";
         Object[] parameters = new Object[] {prefix,name};
         List<ObservedMethod> observedMethods = jdbcTemplate.query(sql, parameters, new RowMapper<ObservedMethod>() {
             @Override
