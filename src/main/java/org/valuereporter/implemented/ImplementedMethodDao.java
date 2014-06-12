@@ -32,7 +32,7 @@ public class ImplementedMethodDao {
         List<ImplementedMethod> implementedMethods = jdbcTemplate.query(sql, parameters, new RowMapper<ImplementedMethod>() {
             @Override
             public ImplementedMethod mapRow(ResultSet resultSet, int i) throws SQLException {
-                log.debug("Returned values: {},{}", resultSet.getObject(1),resultSet.getObject(2));
+                //log.debug("Returned values: {},{}", resultSet.getObject(1),resultSet.getObject(2));
 
                 ImplementedMethod implementedMethod = new ImplementedMethod(
                         resultSet.getString(1),
@@ -48,7 +48,7 @@ public class ImplementedMethodDao {
         List<ImplementedMethod> implementedMethods = jdbcTemplate.query(sql, parameters, new RowMapper<ImplementedMethod>() {
             @Override
             public ImplementedMethod mapRow(ResultSet resultSet, int i) throws SQLException {
-                log.debug("Returned values: {},{}", resultSet.getObject(1),resultSet.getObject(2));
+                //log.debug("Returned values: {},{}", resultSet.getObject(1),resultSet.getObject(2));
 
                 ImplementedMethod implementedMethod = new ImplementedMethod(
                         resultSet.getString(1),
