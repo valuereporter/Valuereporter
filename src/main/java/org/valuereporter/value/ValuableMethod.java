@@ -15,6 +15,11 @@ public class ValuableMethod {
         this.name = name;
         this.usageCount = usageCount;
     }
+    public ValuableMethod(String prefix,String name, long usageCount) {
+        this.prefix = prefix;
+        this.name = name;
+        this.usageCount = usageCount;
+    }
 
     public String getPrefix() {
         return prefix;
