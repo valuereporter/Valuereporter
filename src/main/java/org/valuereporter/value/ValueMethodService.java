@@ -36,7 +36,8 @@ public class ValueMethodService implements QueryOperations, WriteOperations{
     }
 
     @Override
-    public List<ValuableMethod> findValuableDistribution(String prefix) {
+    public List<ValuableMethod> findValuableDistribution(String prefix, String filterOnName) {
+        boolean doFilter = filterOnName != null;
         ValuableMethod unused = new ValuableMethod("Unused", 0);
         ValuableMethod lowUsage = new ValuableMethod("Less than 5", 0);
         ValuableMethod highUsage = new ValuableMethod("HighUsage", 0);
@@ -58,13 +59,15 @@ public class ValueMethodService implements QueryOperations, WriteOperations{
                 allMethods.add(usedMethod);
             }
 
-            long usageCount = usedMethod.getUsageCount();
-            if (usageCount < 1) {
-                unused.addUsageCount(1);
-            } else if (usageCount < 5) {
-                lowUsage.addUsageCount(1);
-            } else {
-                highUsage.addUsageCount(1);
+            if (doFilter && usedMethod.getName().startsWith(filterOnName)) {
+                long usageCount = usedMethod.getUsageCount();
+                if (usageCount < 1) {
+                    unused.addUsageCount(1);
+                } else if (usageCount < 5) {
+                    lowUsage.addUsageCount(1);
+                } else {
+                    highUsage.addUsageCount(1);
+                }
             }
         }
 

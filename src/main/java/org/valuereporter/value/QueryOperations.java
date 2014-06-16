@@ -7,5 +7,5 @@ import java.util.List;
  */
 public interface QueryOperations {
     List<ValuableMethod> findValuableMethods(String prefix);
-    List<ValuableMethod> findValuableDistribution(String prefix);
+    List<ValuableMethod> findValuableDistribution(String prefix, String filterOnName);
 }

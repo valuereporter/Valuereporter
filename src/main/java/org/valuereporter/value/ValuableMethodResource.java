@@ -80,7 +80,35 @@ public class ValuableMethodResource {
 
         if (prefix != null ) {
             log.trace("findValuableMethods prefix={}", prefix);
-            valuableMethods = queryOperations.findValuableDistribution(prefix);
+            valuableMethods = queryOperations.findValuableDistribution(prefix, null);
+        } else {
+            throw new UnsupportedOperationException("You must supply a prefix.");
+        }
+
+        Writer strWriter = new StringWriter();
+        try {
+            mapper.writeValue(strWriter, valuableMethods);
+        } catch (IOException e) {
+            log.error("Could not convert {} ObservedMethod to JSON.", valuableMethods.size(), e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error converting to requested format.").build();
+        }
+        return Response.ok(strWriter.toString()).build();
+    }
+    //http://localhost:4901/reporter/observe/valuemethods/{prefix}/chart/{filter}
+    /**
+     *
+     * @param prefix prefix used to identify running process
+     * @return  List of ImplementedMethods
+     */
+    @GET
+    @Path("/{prefix}/chart/{filter}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findValuableDistribution(@PathParam("prefix") String prefix,@PathParam("filter") String filter ) {
+        final List<ValuableMethod> valuableMethods;
+
+        if (prefix != null ) {
+            log.trace("findValuableMethods prefix={}, filter {}", prefix, filter);
+            valuableMethods = queryOperations.findValuableDistribution(prefix, filter);
         } else {
             throw new UnsupportedOperationException("You must supply a prefix.");
         }

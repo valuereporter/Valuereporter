@@ -16,8 +16,8 @@
 <script type="text/javascript">
     var chart;
     var dill='${pageContext.request.contextPath}/valuemethods/${model.prefix}/chart';
-    var uptime_vs_in_use_url =  "/reporter/observe/valuemethods/${model.prefix}/chart";
-    $.getJSON('/reporter/observe/valuemethods/${model.prefix}/chart', function(data) {
+    var uptime_vs_in_use_url =  "/reporter/observe/valuemethods/${model.prefix}/chart/${model.filterOnName}";
+    $.getJSON('/reporter/observe/valuemethods/${model.prefix}/chart/${model.filterOnName}', function(data) {
         var mySeries = [];
 
         console.log(data);

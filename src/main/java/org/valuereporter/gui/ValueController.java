@@ -18,13 +18,14 @@ public class ValueController {
     private static final Logger log = LoggerFactory.getLogger(ValueController.class);
 
     public static final String PREFIX = "prefix";
-    public static final String METHOD_NAME = "methodName";
+    public static final String FILTER_ON_NAME = "filterOnName";
 
     @RequestMapping("/inuse")
-    public ModelAndView showSlaGraph(@RequestParam(value = PREFIX, required = true) String prefix) {
+    public ModelAndView showSlaGraph(@RequestParam(value = PREFIX, required = true) String prefix, @RequestParam(value = FILTER_ON_NAME, required = false) String filterOnName) {
         Map model = new HashMap<String,String>();
         model.put(PREFIX, prefix);
-        log.trace("Input prefix {}", prefix);
+        model.put(FILTER_ON_NAME, filterOnName);
+        log.trace("Input prefix {}, filterOnName {}", prefix, filterOnName);
         return new ModelAndView("inuse", "model", model);
     }
 
