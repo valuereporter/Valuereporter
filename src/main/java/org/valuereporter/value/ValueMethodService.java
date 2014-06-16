@@ -37,19 +37,25 @@ public class ValueMethodService implements QueryOperations, WriteOperations{
 
     @Override
     public List<ValuableMethod> findValuableDistribution(String prefix) {
-        ValuableMethod unused = new ValuableMethod("unused", 0);
-        ValuableMethod lowUsage = new ValuableMethod("less than 5", 0);
+        ValuableMethod unused = new ValuableMethod("Unused", 0);
+        ValuableMethod lowUsage = new ValuableMethod("Less than 5", 0);
         ValuableMethod highUsage = new ValuableMethod("HighUsage", 0);
 
         List<ImplementedMethod> implementedMethods = implementedMethodDao.findImplementedMethodsByPrefix(prefix);
         List<ValuableMethod> usageCountMethods = valueDao.findUsageByMethod(prefix);
+        log.trace("Usage count: {}", buildUsageCountCsv(usageCountMethods));
         Map<String, ValuableMethod> usageCountMap = buildMap(usageCountMethods);
 
         ValuableMethod usedMethod = null;
+        List<ValuableMethod> allMethods = new ArrayList<>();
         for (ImplementedMethod implementedMethod : implementedMethods) {
             usedMethod = usageCountMap.get(implementedMethod.getName());
             if (usedMethod == null) {
                 usedMethod = new ValuableMethod(implementedMethod.getPrefix(), implementedMethod.getName(), UNUSED);
+            }
+
+            if (log.isTraceEnabled()) {
+                allMethods.add(usedMethod);
             }
 
             long usageCount = usedMethod.getUsageCount();
@@ -62,11 +68,21 @@ public class ValueMethodService implements QueryOperations, WriteOperations{
             }
         }
 
+        log.trace("Implemented count: {}", buildUsageCountCsv(allMethods));
+
         List<ValuableMethod> valuableDistribution = new ArrayList<>(3);
         valuableDistribution.add(unused);
         valuableDistribution.add(lowUsage);
         valuableDistribution.add(highUsage);
         return valuableDistribution;
+    }
+
+    private String buildUsageCountCsv(List<ValuableMethod> usageCountMethods) {
+        String usageCount = "Start.";
+        for (ValuableMethod usageCountMethod : usageCountMethods) {
+            usageCount = usageCount + "\n" +usageCountMethod.toCSV();
+        }
+        return usageCount;
     }
 
     protected Map<String, ValuableMethod> buildMap(List<ValuableMethod> usageCountMethods) {

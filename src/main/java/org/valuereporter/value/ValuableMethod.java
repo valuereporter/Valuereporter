@@ -56,4 +56,14 @@ public class ValuableMethod {
     public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
+
+    public String toCSV() {
+        if (name == null) {
+            name = "";
+        }
+        if (prefix == null) {
+            prefix = "";
+        }
+        return prefix.trim() + "," + name.trim() + "," + usageCount + "," + startTime + "," + endTime;
+    }
 }

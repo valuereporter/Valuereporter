@@ -67,7 +67,7 @@ public class ImplementedMethodResource {
         return Response.ok(strWriter.toString()).build();
     }
 
-    //http://localhost:4901/reporter/observe/implementedmethod/{prefix}
+    //http://localhost:4901/reporter/observe/implementedmethods/{prefix}
     /**
      * A request with no filtering parameters should return a list of all ImplementedMethods.
      *
