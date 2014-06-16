@@ -15,9 +15,13 @@
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script type="text/javascript">
     var chart;
-    var dill='${pageContext.request.contextPath}/valuemethods/${model.prefix}/chart';
-    var uptime_vs_in_use_url =  "/reporter/observe/valuemethods/${model.prefix}/chart/${model.filterOnName}";
-    $.getJSON('/reporter/observe/valuemethods/${model.prefix}/chart/${model.filterOnName}', function(data) {
+    var filterOnName = '${model.filterOnName}';
+    var chartDataUrl = "/reporter/observe/valuemethods/${model.prefix}/chart/${model.filterOnName}";
+    if (!filterOnName) {
+        chartDataUrl = "/reporter/observe/valuemethods/${model.prefix}/chart";
+    }
+    alert("Chart " + chartDataUrl);
+    $.getJSON(chartDataUrl, function(data) {
         var mySeries = [];
 
         console.log(data);
