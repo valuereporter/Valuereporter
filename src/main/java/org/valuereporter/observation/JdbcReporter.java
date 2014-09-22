@@ -16,15 +16,8 @@ public class JdbcReporter  {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private void report(long timestamp, String name, String header, String line, Object... values) {
-        Integer countKeys = new Integer(0);
-        Integer countIntervals = new Integer(0);
+    private void report(long timestamp, String prefix, String methodName, Object... values) {
         try {
-            String prefix = name.split("-")[0];
-            String methodName = name.split("-")[1];
-            if (methodName != null) {
-                methodName = methodName.trim();
-            }
             log.trace("Update for prefix [{}], methodName [{}]", prefix, methodName);
             int rowsUpdated = insertObservedInterval(prefix, methodName,timestamp, values);
             if (rowsUpdated < 1) {
@@ -33,7 +26,6 @@ public class JdbcReporter  {
                 rowsUpdated = insertObservedInterval(prefix, methodName, timestamp, values);
             }
             log.trace("Updated {} rows", rowsUpdated);
-            countIntervals = jdbcTemplate.queryForObject("select count(*) from ObservedInterval", Integer.class);
         } catch (Exception e) {
             log.error("error", e.getMessage(), e);
         }
