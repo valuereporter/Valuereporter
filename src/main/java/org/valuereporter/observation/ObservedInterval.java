@@ -1,5 +1,7 @@
 package org.valuereporter.observation;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+
 /**
  * @author <a href="mailto:bard.lind@gmail.com">Bard Lind</a>
  */
@@ -7,21 +9,13 @@ public class ObservedInterval {
     private final String methodName;
     private final long interval;
     private final long endOfInterval;
-
-    private long count = 0; // (Long)values[0];
-    private double max = 0; //(Double)values[1]; //snapshot.getMax()),
-    private double mean = 0; //(Double)values[2]; //       convertDuration(snapshot.getMean()),
-    private double min = 0; //(Double)values[3]; //convertDuration(snapshot.getMin()),
-    private double standardDeviation = 0; //(Double)values[4]; //convertDuration(snapshot.getStdDev()),
-    private double median = 0; //(Double)values[5]; //convertDuration(snapshot.getMedian()),
-    private double p95 = 0; //(Double)values[7]; //convertDuration(snapshot.get95thPercentile()),
-    private double p98 = 0; //(Double)values[8]; //convertDuration(snapshot.get98thPercentile()),
-    private double p99 = 0; //(Double)values[9]; //convertDuration(snapshot.get99thPercentile()),
+    private DescriptiveStatistics stats;
 
     public ObservedInterval(String methodName, long intervalInMillis) {
         this.methodName = methodName;
         this.interval = intervalInMillis;
         this.endOfInterval = now() + intervalInMillis;
+        stats = new DescriptiveStatistics();
     }
 
     private long now() {
@@ -31,7 +25,7 @@ public class ObservedInterval {
     public void observed(ObservedMethod method) {
         if (now() > endOfInterval){
             //Report to database
-
+//TODO move to repository
             //Flush the data
             flushData();
         } else {
@@ -41,19 +35,18 @@ public class ObservedInterval {
     }
 
     void updateStatistics(ObservedMethod method) {
+        getStats().addValue(method.getDuration());
+    }
 
+    private DescriptiveStatistics getStats() {
+        if (stats == null) {
+            stats = new DescriptiveStatistics();
+        }
+        return stats;
     }
 
     void flushData() {
-         long count = 0;
-         double max = 0;
-         double mean = 0;
-         double min = 0;
-         double standardDeviation = 0;
-         double median = 0;
-         double p95 = 0;
-         double p98 = 0;
-         double p99 = 0;
+        stats = new DescriptiveStatistics();
     }
 
     public String getMethodName() {
@@ -69,38 +62,39 @@ public class ObservedInterval {
     }
 
     public long getCount() {
-        return count;
+        return getStats().getN();
     }
 
     public double getMax() {
-        return max;
+        return getStats().getMax();
     }
 
     public double getMean() {
-        return mean;
+        return getStats().getMean();
     }
 
     public double getMin() {
-        return min;
+        return getStats().getMin();
     }
 
     public double getStandardDeviation() {
-        return standardDeviation;
+        return getStats().getStandardDeviation();
     }
 
     public double getMedian() {
-        return median;
+        return getStats().getPercentile(50);
     }
 
     public double getP95() {
-        return p95;
+        return getStats().getPercentile(95);
     }
 
     public double getP98() {
-        return p98;
+        return getStats().getPercentile(98);
     }
 
     public double getP99() {
-        return p99;
+        return getStats().getPercentile(99);
     }
+
 }

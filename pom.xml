@@ -441,6 +441,14 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.1</version>
         </dependency>
+
+        <!--Statistics with Commons Math-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.3</version>
+        </dependency>
+
         <!-- Jersey http client -->
         <dependency>
             <artifactId>jersey-client</artifactId>
