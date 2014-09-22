@@ -1,7 +1,8 @@
 package org.valuereporter.observation;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,8 +23,9 @@ public class PrefixCollection {
     }
 
 
-    public Collection<ObservedInterval> getIntervalls() {
-        return intervals.values();
+    public List<ObservedInterval> getIntervalls() {
+        List<ObservedInterval> intervalList = new ArrayList<>(intervals.values());
+        return intervalList;
     }
 
 }

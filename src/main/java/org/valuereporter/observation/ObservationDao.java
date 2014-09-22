@@ -13,7 +13,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -120,9 +119,51 @@ public class ObservationDao {
 
     }
 
-    public void updateStatistics(String prefix, Collection<ObservedInterval> intervals) {
-        //FIXME add data
+    public void updateStatistics(final String prefix, final List<ObservedInterval> intervals) {
 
+        String sql = "insert into ObservedInterval (observedKeysId, startTime, duration, count, max, min, mean, median, stdDev, p95, p98, p99)\n" +
+                "select o.id," +
+                "?, ?,?,?,?,?,?,?,?,?,? " +
+                "  from ObservedKeys o\n" +
+                "  where prefix= ? and methodName = ?;";
+
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+
+            @Override
+            public void setValues(PreparedStatement ps, int i)
+                    throws SQLException {
+                ObservedInterval interval = intervals.get(i);
+                Timestamp sqlDate = new Timestamp(interval.getStartTime());
+                ps.setTimestamp(1, sqlDate);
+                ps.setLong(2, interval.getInterval());
+                ps.setLong(3, interval.getCount());
+                ps.setDouble(4, interval.getMax());
+                ps.setDouble(5, interval.getMin());
+                ps.setDouble(6, interval.getMean());
+                ps.setDouble(7, interval.getMedian());
+                ps.setDouble(8, interval.getStandardDeviation());
+                ps.setDouble(9, interval.getP95());
+                ps.setDouble(10, interval.getP98());
+                ps.setDouble(11, interval.getP99());
+                ps.setString(12,prefix);
+                ps.setString(13, interval.getMethodName());
+
+            }
+
+            @Override
+            public int getBatchSize() {
+                return intervals.size();
+            }
+        });
+
+        /*
+        String sql = "insert into ObservedInterval (observedKeysId, startTime, duration, count, max, min, mean, median, stdDev, p95, p98, p99)\n" +
+                "  select o.id, '" + sqlDate + "', "+duration +","+ count +"," + max +"," +min + "," + mean + "," + median + "," + standardDeviation +
+                "," + p95+"," + p98+"," + p99+ "\n" +
+                "  from ObservedKeys o\n" +
+                "  where prefix='" + prefix + "' and methodName = '" + methodName + "';";
+        return sql;
+        */
     }
 
     public void ensureObservedKeys(final String prefix, final List<String> methodNames) {
@@ -135,7 +176,7 @@ public class ObservationDao {
             public void setValues(PreparedStatement ps, int i)
                     throws SQLException {
 
-                ps.setString(1,prefix);
+                ps.setString(1, prefix);
                 ps.setString(2, methodNames.get(i));
 
             }
