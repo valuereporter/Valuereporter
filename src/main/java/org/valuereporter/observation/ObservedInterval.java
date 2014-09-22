@@ -9,6 +9,7 @@ public class ObservedInterval {
     private final String methodName;
     private final long interval;
     private final long endOfInterval;
+    private final long startTime;
     private DescriptiveStatistics stats;
 
     public ObservedInterval(String methodName, long intervalInMillis) {
@@ -16,6 +17,7 @@ public class ObservedInterval {
         this.interval = intervalInMillis;
         this.endOfInterval = now() + intervalInMillis;
         stats = new DescriptiveStatistics();
+        startTime = now();
     }
 
     private long now() {
@@ -51,6 +53,10 @@ public class ObservedInterval {
 
     public String getMethodName() {
         return methodName;
+    }
+
+    public long getStartTime() {
+        return startTime;
     }
 
     public long getInterval() {

@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -118,4 +119,34 @@ public class ObservationDao {
 
 
     }
+
+    public void updateStatistics(String prefix, Collection<ObservedInterval> intervals) {
+        //FIXME add data
+
+    }
+
+    public void ensureObservedKeys(final String prefix, final List<String> methodNames) {
+        String sql = "insert ignore into ObservedKeys (prefix, methodName)"
+                + "VALUES " + "(?,?)";
+
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+
+            @Override
+            public void setValues(PreparedStatement ps, int i)
+                    throws SQLException {
+
+                ps.setString(1,prefix);
+                ps.setString(2, methodNames.get(i));
+
+            }
+
+            @Override
+            public int getBatchSize() {
+                return methodNames.size();
+            }
+        });
+
+    }
+
+
 }

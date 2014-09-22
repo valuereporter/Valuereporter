@@ -5,9 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author <a href="bard.lind@gmail.com">Bard Lind</a>
@@ -24,7 +22,7 @@ public class ObservationsRepository {
     }
 
     public void updateStatistics(String prefix, List<ObservedMethod> methods) {
-        PrefixCollection prefixCollection = prefixes.get(prefix);
+        PrefixCollection prefixCollection = getCollection(prefix);
         if (prefixCollection == null) {
             prefixCollection = new PrefixCollection(prefix);
             prefixes.put(prefix, prefixCollection);
@@ -32,5 +30,31 @@ public class ObservationsRepository {
         for (ObservedMethod method : methods) {
             prefixCollection.updateStatistics(method);
         }
+    }
+
+    private PrefixCollection getCollection(String prefix) {
+        return prefixes.get(prefix);
+    }
+
+    public void persistStatistics(String prefix) {
+        PrefixCollection prefixCollection = getCollection(prefix);
+        Collection<ObservedInterval> intervals = prefixCollection.getIntervalls();
+        clearCollection(prefix);
+        updateMissingKeys(prefix, intervals);
+        observationDao.updateStatistics(prefix, intervals);
+
+    }
+
+    private void updateMissingKeys(String prefix, Collection<ObservedInterval> intervals) {
+        List<String> methodNames = new ArrayList<>(intervals.size());
+        for (Iterator<ObservedInterval> interval = intervals.iterator(); interval.hasNext(); ) {
+            ObservedInterval next = interval.next();
+            methodNames.add(next.getMethodName());
+        }
+        observationDao.ensureObservedKeys(prefix, methodNames);
+    }
+
+    private void clearCollection(String prefix) {
+        prefixes.remove(prefix);
     }
 }

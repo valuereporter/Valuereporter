@@ -1,5 +1,6 @@
 package org.valuereporter.observation;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,5 +21,9 @@ public class PrefixCollection {
         observedInterval.updateStatistics(method);
     }
 
+
+    public Collection<ObservedInterval> getIntervalls() {
+        return intervals.values();
+    }
 
 }

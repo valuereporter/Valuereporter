@@ -36,6 +36,7 @@ public class ObservedIntervalTest {
         assertEquals(interval.getMin(), 20.0);
         assertEquals(interval.getMean(), 33.333333333333336);
         assertEquals(interval.getMedian(), 40.0);
+        assertEquals(interval.getStandardDeviation(), 11.547005383792515);
 
     }
 
