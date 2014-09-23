@@ -119,7 +119,7 @@ public class ObservationDao {
 
     }
 
-    public void updateStatistics(final String prefix, final List<ObservedInterval> intervals) {
+    public int[] updateStatistics(final String prefix, final List<ObservedInterval> intervals) {
 
         String sql = "insert into ObservedInterval (observedKeysId, startTime, duration, count, max, min, mean, median, stdDev, p95, p98, p99)\n" +
                 "select o.id," +
@@ -127,7 +127,8 @@ public class ObservationDao {
                 "  from ObservedKeys o\n" +
                 "  where prefix= ? and methodName = ?;";
 
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+        int[] intervalsUpdated;
+        intervalsUpdated = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
             @Override
             public void setValues(PreparedStatement ps, int i)
@@ -156,6 +157,8 @@ public class ObservationDao {
             }
         });
 
+        return intervalsUpdated;
+
         /*
         String sql = "insert into ObservedInterval (observedKeysId, startTime, duration, count, max, min, mean, median, stdDev, p95, p98, p99)\n" +
                 "  select o.id, '" + sqlDate + "', "+duration +","+ count +"," + max +"," +min + "," + mean + "," + median + "," + standardDeviation +
@@ -166,11 +169,12 @@ public class ObservationDao {
         */
     }
 
-    public void ensureObservedKeys(final String prefix, final List<String> methodNames) {
+    public int[] ensureObservedKeys(final String prefix, final List<String> methodNames) {
         String sql = "insert ignore into ObservedKeys (prefix, methodName)"
                 + "VALUES " + "(?,?)";
 
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+        int[] keysUpdated;
+        keysUpdated = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
             @Override
             public void setValues(PreparedStatement ps, int i)
@@ -186,6 +190,8 @@ public class ObservationDao {
                 return methodNames.size();
             }
         });
+
+        return keysUpdated;
 
     }
 
