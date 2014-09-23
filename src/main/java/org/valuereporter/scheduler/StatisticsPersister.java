@@ -29,8 +29,9 @@ public class StatisticsPersister {
     }
 
     public void startScheduler(ObservationsRepository repository, String prefix){
+        log.info("Starting scheduler for prefix {}, initialDelay {}, delayBetweenRuns {}", prefix, initialDelay, delayBetweenRuns);
         Runnable persist = new PersistTask(repository, prefix);
-        ScheduledFuture<?> soundAlarmFuture = scheduler.scheduleWithFixedDelay(
+        ScheduledFuture<?> persistenceFuture = scheduler.scheduleWithFixedDelay(
                 persist, initialDelay, delayBetweenRuns, TimeUnit.SECONDS
         );
     }
