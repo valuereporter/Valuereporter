@@ -18,10 +18,11 @@ import java.util.List;
 @Service
 public class ObservationsService implements QueryOperations, WriteOperations {
     private static final Logger log = LoggerFactory.getLogger(ObservationsService.class);
-    private static final long MINUTES_15 = 5;//15 * 60;
+    private static final long MINUTES_15 = 15 * 60;
     private static final long INITIAL_DELAY = MINUTES_15;
     private static final long DELAY_BETWEEN_RUNS = MINUTES_15;
     private final ObservationsRepository observationsRepository;
+    private int intervalSeconds = -1;
     private List<ObservedMethod> observedMethodsChache;
     private ObservationDao observationDao;
     private boolean persistMethodDetails = false;
@@ -29,10 +30,13 @@ public class ObservationsService implements QueryOperations, WriteOperations {
     private StatisticsPersister statisticsPersister = null;
 
     @Autowired
-    public ObservationsService(ObservationDao observationDao, ObservationsRepository observationsRepository, @Value("${observation.methods.detailed}") boolean persistMethodDetails ) {
+    public ObservationsService(ObservationDao observationDao, ObservationsRepository observationsRepository, @Value("${observation.methods.detailed}") boolean persistMethodDetails, @Value("${observation.interval.seconds}") int intervalSeconds  ) {
         this.observationDao = observationDao;
         this.observationsRepository = observationsRepository;
         doPersistMethodDetails(persistMethodDetails);
+        if (intervalSeconds > 0) {
+            this.intervalSeconds = intervalSeconds;
+        }
     }
 
     @Override
@@ -65,6 +69,10 @@ public class ObservationsService implements QueryOperations, WriteOperations {
         if (statisticsPersister == null) {
             long initialDelay = INITIAL_DELAY;
             long delayBetweenRuns = DELAY_BETWEEN_RUNS;
+            if (intervalSeconds > 0) {
+                initialDelay = intervalSeconds;
+                delayBetweenRuns = intervalSeconds;
+            }
             long shutdownAfter = -1; //Not used
             statisticsPersister = new StatisticsPersister(initialDelay, delayBetweenRuns, shutdownAfter);
         }
