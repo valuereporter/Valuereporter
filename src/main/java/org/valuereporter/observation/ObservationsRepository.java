@@ -45,7 +45,7 @@ public class ObservationsRepository {
         log.debug("Got prefixCollection {}", prefixCollection.toString());
         List<ObservedInterval> intervals = prefixCollection.getIntervals();
         log.debug("Got intervals size {}", intervals.size());
-        clearCollection(prefix);
+        //clearCollection(prefix);
         log.debug("cleared collection");
         int[] keysUpdated = updateMissingKeys(prefix, intervals);
         log.trace("updated {} keys", keysUpdated);
