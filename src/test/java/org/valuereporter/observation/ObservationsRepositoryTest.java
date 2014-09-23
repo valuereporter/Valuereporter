@@ -32,7 +32,7 @@ public class ObservationsRepositoryTest {
         ObservationsRepository repository = new ObservationsRepository(observationDaoMock);
         repository.updateStatistics(PREFIX,observedMethodsStubs());
         PrefixCollection prefixCollection = repository.getCollection(PREFIX);
-        List<ObservedInterval> intervalls = prefixCollection.getIntervalls();
+        List<ObservedInterval> intervalls = prefixCollection.getIntervals();
         assertEquals(intervalls.size(),1);
         repository.persistStatistics(PREFIX);
         verify(observationDaoMock).updateStatistics(eq(PREFIX), eq(intervalls));

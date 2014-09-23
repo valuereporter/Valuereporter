@@ -28,7 +28,7 @@ public class PrefixCollection {
     }
 
 
-    public List<ObservedInterval> getIntervalls() {
+    public List<ObservedInterval> getIntervals() {
         List<ObservedInterval> intervalList = new ArrayList<>(intervals.values());
         return intervalList;
     }

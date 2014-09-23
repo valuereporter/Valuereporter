@@ -27,7 +27,7 @@ public class PrefixCollectionTest {
         prefixCollection.updateStatistics(method1b);
         prefixCollection.updateStatistics(method2);
 
-        List<ObservedInterval> intervalls = prefixCollection.getIntervalls();
+        List<ObservedInterval> intervalls = prefixCollection.getIntervals();
         assertNotNull(intervalls);
         assertEquals(intervalls.size(),2);
         ObservedInterval testMethod = findInList("testMethod", intervalls);

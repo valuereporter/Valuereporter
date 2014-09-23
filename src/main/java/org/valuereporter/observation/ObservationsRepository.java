@@ -41,7 +41,7 @@ public class ObservationsRepository {
 
     public void persistStatistics(String prefix) {
         PrefixCollection prefixCollection = getCollection(prefix);
-        List<ObservedInterval> intervals = prefixCollection.getIntervalls();
+        List<ObservedInterval> intervals = prefixCollection.getIntervals();
         clearCollection(prefix);
         updateMissingKeys(prefix, intervals);
         observationDao.updateStatistics(prefix, intervals);
