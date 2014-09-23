@@ -12,6 +12,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 /**
  * @author <a href="mailto:bard.lind@gmail.com">Bard Lind</a>
@@ -36,6 +37,19 @@ public class ObservationsRepositoryTest {
         assertEquals(intervalls.size(),1);
         repository.persistStatistics(PREFIX);
         verify(observationDaoMock).updateStatistics(eq(PREFIX), eq(intervalls));
+    }
+
+    @Test
+    public static void verifyCollectionIsCleared() {
+        ObservationDao observationDaoMock = mock(ObservationDao.class);
+        ObservationsRepository repository = new ObservationsRepository(observationDaoMock);
+        repository.updateStatistics(PREFIX,observedMethodsStubs());
+        PrefixCollection prefixCollection = repository.getCollection(PREFIX);
+        log.debug("Collection size before {}", prefixCollection.getIntervals().size());
+        List<ObservedInterval> intervalls = prefixCollection.getIntervals();
+        assertEquals(intervalls.size(), 1);
+        repository.persistStatistics(PREFIX);
+        assertNull(repository.getCollection(PREFIX));
     }
 
     private static List<ObservedMethod> observedMethodsStubs() {
