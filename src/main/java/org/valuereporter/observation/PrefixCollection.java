@@ -12,6 +12,7 @@ public class PrefixCollection {
 
     private final String prefix;
     private Map<String, ObservedInterval> intervals = new HashMap<>();
+    private final long defaultInterval = 5 * 1000;
 
     public PrefixCollection(String prefix) {
         this.prefix = prefix;
@@ -19,6 +20,10 @@ public class PrefixCollection {
 
     public void updateStatistics(ObservedMethod method) {
         ObservedInterval observedInterval = intervals.get(method.getName());
+        if (observedInterval == null) {
+            observedInterval = new ObservedInterval(method.getName(), defaultInterval);
+            intervals.put(method.getName(), observedInterval);
+        }
         observedInterval.updateStatistics(method);
     }
 
