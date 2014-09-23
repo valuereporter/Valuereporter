@@ -33,4 +33,12 @@ public class PrefixCollection {
         return intervalList;
     }
 
+    @Override
+    public String toString() {
+        return "PrefixCollection{" +
+                "prefix='" + prefix + '\'' +
+                ", intervals=" + intervals +
+                ", defaultInterval=" + defaultInterval +
+                '}';
+    }
 }

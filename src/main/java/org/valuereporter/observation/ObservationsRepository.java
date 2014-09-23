@@ -40,21 +40,29 @@ public class ObservationsRepository {
     }
 
     public void persistStatistics(String prefix) {
+        log.debug("persistStatistics starts");
         PrefixCollection prefixCollection = getCollection(prefix);
+        log.debug("Got prefixCollection {}", prefixCollection.toString());
         List<ObservedInterval> intervals = prefixCollection.getIntervals();
+        log.debug("Got intervals size {}", intervals.size());
         clearCollection(prefix);
-        updateMissingKeys(prefix, intervals);
-        observationDao.updateStatistics(prefix, intervals);
+        log.debug("cleared collection");
+        int[] keysUpdated = updateMissingKeys(prefix, intervals);
+        log.trace("updated {} keys", keysUpdated);
+        int[] intervalsUpdated = observationDao.updateStatistics(prefix, intervals);
+        log.trace("updated {} intervals", intervalsUpdated);
 
     }
 
-    private void updateMissingKeys(String prefix, List<ObservedInterval> intervals) {
+    private int[] updateMissingKeys(String prefix, List<ObservedInterval> intervals) {
         List<String> methodNames = new ArrayList<>(intervals.size());
         for (ObservedInterval interval : intervals) {
             methodNames.add(interval.getMethodName());
         }
 
-        observationDao.ensureObservedKeys(prefix, methodNames);
+        int[] keysUpdated;
+        keysUpdated = observationDao.ensureObservedKeys(prefix, methodNames);
+        return keysUpdated;
     }
 
     private void clearCollection(String prefix) {
