@@ -16,20 +16,14 @@ import static org.testng.Assert.assertEquals;
 /**
  * @author <a href="mailto:bard.lind@gmail.com">Bard Lind</a>
  */
-public class ObservationsRepositoryManualTest {
-    private static final Logger log = LoggerFactory.getLogger(ObservationsRepositoryManualTest.class);
+public class ObservationsRepositoryTest {
+    private static final Logger log = LoggerFactory.getLogger(ObservationsRepositoryTest.class);
 
     ObservationDao observationDao;
     private final static String PREFIX = "ManualTest";
 
-    public ObservationsRepositoryManualTest(ObservationDao observationDao) {
+    public ObservationsRepositoryTest(ObservationDao observationDao) {
         this.observationDao = observationDao;
-    }
-
-    public static void main(String[] args) {
-        testObservationsRepositoryAddAndPersist();
-
-        //TODO add and persist with Spring see http://blog.frankel.ch/database-unit-testing-with-dbunit-spring-and-testng
     }
 
     @Test
@@ -41,7 +35,7 @@ public class ObservationsRepositoryManualTest {
         List<ObservedInterval> intervalls = prefixCollection.getIntervalls();
         assertEquals(intervalls.size(),1);
         repository.persistStatistics(PREFIX);
-        verify(observationDaoMock).updateStatistics(eq(PREFIX),eq(intervalls));
+        verify(observationDaoMock).updateStatistics(eq(PREFIX), eq(intervalls));
     }
 
     private static List<ObservedMethod> observedMethodsStubs() {

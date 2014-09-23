@@ -35,7 +35,7 @@ public class ObservationsRepository {
         }
     }
 
-    private PrefixCollection getCollection(String prefix) {
+    PrefixCollection getCollection(String prefix) {
         return prefixes.get(prefix);
     }
 

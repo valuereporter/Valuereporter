@@ -25,14 +25,17 @@ public class ObservedInterval {
     }
 
     public void observed(ObservedMethod method) {
+        updateStatistics(method);
+        /*
         if (now() > endOfInterval){
             //Report to database
 //TODO move to repository
             //Flush the data
             flushData();
         } else {
-            updateStatistics(method);
+           updateStatistics(method);
         }
+        */
 
     }
 
