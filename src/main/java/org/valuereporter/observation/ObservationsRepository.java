@@ -45,7 +45,7 @@ public class ObservationsRepository {
         log.debug("Got prefixCollection {}", prefixCollection.toString());
         List<ObservedInterval> intervals = prefixCollection.getIntervals();
         log.debug("Got intervals size {}", intervals.size());
-        //clearCollection(prefix);
+        clearCollection(prefix);
         log.debug("cleared collection");
         int[] keysUpdated = updateMissingKeys(prefix, intervals);
         log.trace("updated {} keys", keysUpdated);
@@ -55,6 +55,7 @@ public class ObservationsRepository {
     }
 
     private int[] updateMissingKeys(String prefix, List<ObservedInterval> intervals) {
+        log.debug("updateMissingKeys intervalSisze {}", intervals.size());
         List<String> methodNames = new ArrayList<>(intervals.size());
         for (ObservedInterval interval : intervals) {
             methodNames.add(interval.getMethodName());

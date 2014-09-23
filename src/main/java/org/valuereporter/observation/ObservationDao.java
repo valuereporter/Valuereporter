@@ -170,6 +170,7 @@ public class ObservationDao {
     }
 
     public int[] ensureObservedKeys(final String prefix, final List<String> methodNames) {
+        log.debug("ensureObservedKeys. MethodNames {}", methodNames);
         String sql = "insert ignore into ObservedKeys (prefix, methodName)"
                 + "VALUES " + "(?,?)";
 
@@ -190,7 +191,7 @@ public class ObservationDao {
                 return methodNames.size();
             }
         });
-
+        log.debug("keysupdated {}", keysUpdated);
         return keysUpdated;
 
     }
