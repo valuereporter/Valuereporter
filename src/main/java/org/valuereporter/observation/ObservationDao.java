@@ -174,27 +174,36 @@ public class ObservationDao {
         String sql = "insert ignore into ObservedKeys (prefix, methodName)"
                 + "VALUES " + "(?,?)";
 
-        int[] keysUpdated;
-        keysUpdated = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+        int[] keysUpdated = null;
+        try {
+            keysUpdated = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
-            @Override
-            public void setValues(PreparedStatement ps, int i)
-                    throws SQLException {
+                @Override
+                public void setValues(PreparedStatement ps, int i)
+                        throws SQLException {
 
-                ps.setString(1, prefix);
-                ps.setString(2, methodNames.get(i));
+                    ps.setString(1, prefix);
+                    ps.setString(2, methodNames.get(i));
 
-            }
+                }
 
-            @Override
-            public int getBatchSize() {
-                return methodNames.size();
-            }
-        });
-        log.debug("keysupdated {}", keysUpdated);
+                @Override
+                public int getBatchSize() {
+                    return methodNames.size();
+                }
+            });
+            log.debug("keysupdated {}", keysUpdated);
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
+
         return keysUpdated;
 
     }
 
 
+    public List<String> findObservedKeys(String prefix) {
+
+        return null;
+    }
 }

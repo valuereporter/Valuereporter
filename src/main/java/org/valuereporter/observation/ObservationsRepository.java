@@ -62,6 +62,9 @@ public class ObservationsRepository {
         }
 
         int[] keysUpdated;
+        List<String> existingKeys = observationDao.findObservedKeys(prefix);
+        //Iterate over intervals.
+        //If key not found, insert key
         keysUpdated = observationDao.ensureObservedKeys(prefix, methodNames);
         return keysUpdated;
     }
