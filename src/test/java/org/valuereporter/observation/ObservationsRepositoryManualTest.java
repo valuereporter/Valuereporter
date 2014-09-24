@@ -66,7 +66,7 @@ public class ObservationsRepositoryManualTest extends AbstractTestNGSpringContex
         long start = new DateTime(end).minusMillis(50).getMillis();
         observedMethods.add(new ObservedMethod(PREFIX,"firstMethod",start, end));
         observedMethods.add(new ObservedMethod(PREFIX,"firstMethod",start +2, end +3));
-        observedMethods.add(new ObservedMethod(PREFIX,"secondMethod",start +10, end +12));
+        observedMethods.add(new ObservedMethod(PREFIX,"secondMethodddd",start +10, end +12));
         return observedMethods;
     }
 }

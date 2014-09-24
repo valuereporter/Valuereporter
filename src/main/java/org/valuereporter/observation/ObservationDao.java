@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -201,9 +203,24 @@ public class ObservationDao {
 
     }
 
+    
+
 
     public List<String> findObservedKeys(String prefix) {
+        List<String> observedKeys = new ArrayList<>();
+        String sql = "SELECT methodName  FROM ObservedKeys WHERE prefix = ?";
+        observedKeys= jdbcTemplate.queryForList(sql, String.class, prefix);
+        return observedKeys;
+    }
 
-        return null;
+    public int insertObservedKey(String prefix, String methodName) {
+        int rowsUpdated = 0;
+        try {
+            String sql = "INSERT into ObservedKeys (prefix, methodName) values (?,?)";
+            rowsUpdated = jdbcTemplate.update(sql, prefix, methodName);
+        } catch (DuplicateKeyException e) {
+            log.trace("Key exists, not inserted. Prefix {}, methodName {}", prefix, methodName);
+        }
+        return rowsUpdated;
     }
 }

@@ -38,7 +38,7 @@ create table if not exists ObservedInterval (
   #t,count,max,mean,min,stddev,p50,p75,p95,p98,p99,p999,mean_rate,m1_rate,m5_rate,m15_rate,rate_unit,duration_unit
 );
 
-insert into ObservedInterval (observedKeysId, startTime, duration, count, max, mean,min)
-  select o.id, '2014-05-13T12:02:43.296', 15*60*1000, 4, 50, 5.0, 2
+insert into ObservedInterval (observedKeysId, startTime, duration, count, max, mean,min,median, stdDev)
+  select o.id, '2014-05-13T12:02:43.296', 15*60*1000, 4, 50, 5.0, 2,0,0
   from ObservedKeys o
   where prefix='initial' and methodName = 'com.valuereporter.test';

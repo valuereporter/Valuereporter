@@ -47,25 +47,34 @@ public class ObservationsRepository {
         log.debug("Got intervals size {}", intervals.size());
         clearCollection(prefix);
         log.debug("cleared collection");
-        int[] keysUpdated = updateMissingKeys(prefix, intervals);
+        int keysUpdated = updateMissingKeys(prefix, intervals);
         log.trace("updated {} keys", keysUpdated);
         int[] intervalsUpdated = observationDao.updateStatistics(prefix, intervals);
         log.trace("updated {} intervals", intervalsUpdated);
 
     }
 
-    private int[] updateMissingKeys(String prefix, List<ObservedInterval> intervals) {
-        log.debug("updateMissingKeys intervalSisze {}", intervals.size());
+    private int updateMissingKeys(String prefix, List<ObservedInterval> intervals) {
+        log.debug("updateMissingKeys intervalSize {}", intervals.size());
         List<String> methodNames = new ArrayList<>(intervals.size());
         for (ObservedInterval interval : intervals) {
             methodNames.add(interval.getMethodName());
         }
 
-        int[] keysUpdated;
+        int keysUpdated = 0;
         List<String> existingKeys = observationDao.findObservedKeys(prefix);
         //Iterate over intervals.
+        String methodName = null;
+        for (ObservedInterval interval : intervals) {
+            methodName = interval.getMethodName();
+            if (!existingKeys.contains(methodName)) {
+                int count = observationDao.insertObservedKey(prefix, methodName);
+                    log.debug("Updated rows {} for prefix {}, methodName {}", count,prefix, methodName);
+                keysUpdated =+ count;
+            }
+        }
         //If key not found, insert key
-        keysUpdated = observationDao.ensureObservedKeys(prefix, methodNames);
+        //keysUpdated = observationDao.ensureObservedKeys(prefix, methodNames);
         return keysUpdated;
     }
 
