@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -26,15 +27,29 @@ public class SlaDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<UsageStatistics> findUsage(String prefix, String methodFilter, DateTime toNow, DateTime oneWeekOld) {
-        String sql = "select ok.prefix, ok.methodName, oi.duration,oi.startTime, oi.count, oi.max, oi.min, oi.mean, oi.median, oi.stdDev," +
-                "oi.p95, oi.p98, oi.p99  from ObservedInterval oi, ObservedKeys ok where ok.prefix=? and ok.methodName=? and ok.id = oi.observedKeysId order by oi.count desc, oi.max desc";
+    public List<UsageStatistics> findUsage(String prefix, String methodFilter, DateTime start, DateTime end) {
+        String sql = "select ok.prefix, ok.methodName, oi.duration,oi.startTime, oi.count, oi.max, oi.min, oi.mean, oi.median, oi.stdDev, oi.p95, oi.p98, oi.p99  \n" +
+                "   from ObservedInterval oi, ObservedKeys ok \n" +
+                "   where oi.startTime >= ? and oi.startTime <= ? and ok.prefix= ? and ok.methodName= ? and ok.id = oi.observedKeysId \n" +
+                "   order by oi.count desc, oi.max desc";
 
-        Object[] parameters = new Object[] {prefix,methodFilter};
+
+       // end = new DateTime(1411557199907L).plusDays(1);
+        Timestamp endTime = null;
+        Timestamp startTime = null;
+        if (end == null) {
+            end = new DateTime();
+        }
+        if (start == null) {
+            start = end.minusDays(7);
+        }
+        endTime = new Timestamp(end.getMillis());
+        startTime = new Timestamp(start.getMillis());
+
+        Object[] parameters = new Object[] {startTime, endTime,prefix,methodFilter};
         List<UsageStatistics> usageStatisticses = jdbcTemplate.query(sql, parameters, new RowMapper<UsageStatistics>() {
             @Override
             public UsageStatistics mapRow(ResultSet resultSet, int i) throws SQLException {
-                //log.debug("Returned values: {},{},{},{},{}", resultSet.getObject(1),resultSet.getObject(2),resultSet.getObject(3),resultSet.getObject(4),resultSet.getObject(5));
 
                 UsageStatistics observedMethod = new UsageStatistics(
                         resultSet.getString(1),

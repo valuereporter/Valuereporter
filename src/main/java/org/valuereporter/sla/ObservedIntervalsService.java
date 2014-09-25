@@ -25,8 +25,6 @@ public class ObservedIntervalsService implements QueryOperations{
     @Override
     public List<UsageStatistics> findUsage(String prefix, String filter, DateTime from, DateTime to) {
         String methodFilter = filter;
-        DateTime toNow = new DateTime();
-        DateTime oneWeekOld = toNow.minusDays(7);
-        return slaDao.findUsage(prefix, methodFilter, toNow, oneWeekOld);
+        return slaDao.findUsage(prefix, methodFilter, from, to);
     }
 }

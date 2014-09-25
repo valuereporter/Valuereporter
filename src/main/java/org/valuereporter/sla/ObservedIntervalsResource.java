@@ -33,7 +33,7 @@ public class ObservedIntervalsResource {
     }
 
     /**
-     * http://localhost:4901/reporter/observe/sla/observations/{prefix}
+     * http://localhost:4901/reporter/observe/sla/observations/{prefix}?filter={methodName}&from=datetimeinmillis&to=datetimeinmillis
      * @param prefix
      * @param filter
      * @return
@@ -41,10 +41,19 @@ public class ObservedIntervalsResource {
     @GET
     @Path("/{prefix}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findValuableMethods(@PathParam("prefix") String prefix, @QueryParam("filter") String filter ) {//, @QueryParam("from")DateTime from, @QueryParam("to") DateTime to) {
-        DateTime to = new DateTime();
-        DateTime from = to.minusDays(7);
-        List<UsageStatistics> usages = service.findUsage(prefix, filter, from, to);
+    public Response findValuableMethods(@PathParam("prefix") String prefix, @QueryParam("filter") String filter , @QueryParam("from") Long from, @QueryParam("to") Long to) {
+        DateTime toDate = null;
+        DateTime fromDate = null;
+        if (to == null) {
+            to = System.currentTimeMillis();
+        }
+        toDate = new DateTime(to);
+        if (from != null) {
+            fromDate = new DateTime(from);
+        }else {
+             fromDate = toDate.minusDays(7);
+        }
+        List<UsageStatistics> usages = service.findUsage(prefix, filter, fromDate, toDate);
         Writer strWriter = new StringWriter();
         try {
             mapper.writeValue(strWriter, usages);
