@@ -23,11 +23,11 @@ import java.util.List;
 public class ObservedIntervalsResource {
     private static final Logger log = LoggerFactory.getLogger(ObservedIntervalsResource.class);
 
-    ObservedIntervalsService service;
+    ObservedQueryOperations service;
     private final ObjectMapper mapper;
 
     @Autowired
-    public ObservedIntervalsResource(ObservedIntervalsService service, ObjectMapper mapper) {
+    public ObservedIntervalsResource(ObservedQueryOperations service, ObjectMapper mapper) {
         this.service = service;
         this.mapper = mapper;
     }

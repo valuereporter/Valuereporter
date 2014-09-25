@@ -7,7 +7,8 @@ import java.util.List;
 /**
  * @author <a href="mailto:bard.lind@gmail.com">Bard Lind</a>
  */
-public interface QueryOperations {
+public interface ObservedQueryOperations {
 
     List<UsageStatistics> findUsage(String prefix, String filter, DateTime from, DateTime to);
+
 }

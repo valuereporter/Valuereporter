@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import org.valuereporter.ValuereporterInputException;
+import org.valuereporter.helper.StatusType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,7 +53,7 @@ public class SlaDao {
             @Override
             public UsageStatistics mapRow(ResultSet resultSet, int i) throws SQLException {
 
-                UsageStatistics observedMethod = new UsageStatistics(
+                UsageStatistics usageStatistics = new UsageStatistics(
                         resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getLong(3),
@@ -65,14 +67,61 @@ public class SlaDao {
                         resultSet.getDouble(11),
                         resultSet.getDouble(12),
                         resultSet.getDouble(13));
-                return observedMethod;
+                return usageStatistics;
             }
         });
         return usageStatisticses;
 
     }
 
-    private UsageStatistics buildStub() {
-        return new UsageStatistics("stubPrefix", "stubMethodName", 9000, new DateTime().getMillis(), 5, 50, 5, 7.50,7.0,1.25,5,7,50);
+    public List<SlaStatistics> findSlaStatistics(String prefix, String methodName, DateTime start, DateTime end){
+        String sql = "select  oi.startTime,oi.duration, oi.count, oi.max, oi.min, oi.mean, oi.p95  \n" +
+                "   from ObservedInterval oi, ObservedKeys ok \n" +
+                "   where oi.startTime >= ? and oi.startTime <= ? and ok.prefix= ? and ok.methodName= ? and ok.id = oi.observedKeysId \n" +
+                "   order by oi.startTime desc";
+
+        if (isInValid(prefix) || isInValid(methodName) || isInValidDate(start) || isInValidDate(end)) {
+            log.trace("Invalid values for one of prefix {}, methodName {}, start {}, end {}. Will throw exception.", prefix, methodName, start, end);
+            throw new ValuereporterInputException("Invalid data for prefix " + prefix + ", methodName " + methodName + ",startDate " + start
+            + ", or endDate " +end, StatusType.data_error);
+        }
+
+        Timestamp endTime = new Timestamp(end.getMillis());
+        Timestamp startTime = new Timestamp(start.getMillis());
+
+        Object[] parameters = new Object[] {startTime, endTime,prefix,methodName};
+        List<SlaStatistics> slaStatisticses = jdbcTemplate.query(sql, parameters, new RowMapper<SlaStatistics>() {
+            @Override
+            public SlaStatistics mapRow(ResultSet resultSet, int i) throws SQLException {
+                SlaStatistics slaStatistics = new SlaStatistics(
+                        resultSet.getTimestamp(1).getTime(),
+                        resultSet.getLong(2),
+                        resultSet.getLong(3),
+                        resultSet.getDouble(4),
+                        resultSet.getDouble(5),
+                        resultSet.getDouble(6),
+                        resultSet.getDouble(7));
+                return slaStatistics;
+            }
+        });
+        return slaStatisticses;
+
     }
+
+    boolean isValidDate(DateTime date) {
+        return (date != null);
+    }
+    boolean isInValidDate(DateTime date) {
+        return !isValidDate(date);
+    }
+
+    boolean isValid(String value) {
+        return (value != null && !value.trim().isEmpty());
+    }
+
+    boolean isInValid(String value) {
+        return !isValid(value);
+    }
+
+
 }
