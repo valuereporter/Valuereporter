@@ -56,4 +56,5 @@ public class PrefixCollection {
                 ", defaultInterval=" + defaultInterval +
                 '}';
     }
+
 }
