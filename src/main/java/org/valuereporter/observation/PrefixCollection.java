@@ -27,6 +27,21 @@ public class PrefixCollection {
         observedInterval.updateStatistics(method);
     }
 
+    public void updateStatistics(ObservedMethod method, long startTime, long interval) {
+        ObservedInterval observedInterval = intervals.get(method.getName());
+        if (observedInterval == null) {
+            observedInterval = new ObservedInterval(method.getName(), startTime, interval);
+            intervals.put(method.getName(), observedInterval);
+        }
+        observedInterval.updateStatistics(method);
+    }
+
+    public void updateStatisticsList(List<ObservedMethod> methods, long startTime, long interval) {
+        for (ObservedMethod method : methods) {
+            updateStatistics(method, startTime,interval);
+        }
+    }
+
 
     public List<ObservedInterval> getIntervals() {
         List<ObservedInterval> intervalList = new ArrayList<>(intervals.values());

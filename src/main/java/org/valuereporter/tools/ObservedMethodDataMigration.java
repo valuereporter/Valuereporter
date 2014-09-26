@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.valuereporter.Main;
 import org.valuereporter.observation.ObservationDao;
+import org.valuereporter.observation.ObservedInterval;
 import org.valuereporter.observation.ObservedMethod;
 import org.valuereporter.observation.PrefixCollection;
 
@@ -53,10 +54,17 @@ public class ObservedMethodDataMigration {
         DateTime start = new DateTime(2014,9, 24, 13,0,0 );
         DateTime end = start.plusMinutes(15);
         String methodName = methodNames.get(0);
-        log.debug("Find ObservedMethods. prefix {}, methodName {}, start {}, end {}");
+        log.trace("Find ObservedMethods. prefix {}, methodName {}, start {}, end {}");
         List<ObservedMethod> observedMethods = observationDao.findObservedMethods(prefix, methodName, start, end);
-        log.info("Found {} methods. ", observedMethods.size());
-        //FIXME Remember to set correct Interval in millis
+        log.trace("Found {} methods. ", observedMethods.size());
+        long interval = end.getMillis() - start.getMillis();
+        prefixCollection.updateStatisticsList(observedMethods,start.getMillis(), interval);
+        List<ObservedInterval> observedIntervals = prefixCollection.getIntervals();
+
+        log.trace("Found {} intervals.", observedIntervals.size());
+        int[] count = observationDao.updateStatistics(prefix, observedIntervals);
+        log.trace("Updated interval to statistics. count: {}" + count);
+
     }
 
     private static List<String> findMethodsToParse(Properties properties) {

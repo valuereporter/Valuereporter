@@ -13,11 +13,19 @@ public class ObservedInterval {
     private DescriptiveStatistics stats;
 
     public ObservedInterval(String methodName, long intervalInMillis) {
+       this(methodName, -1, intervalInMillis);
+    }
+
+    public ObservedInterval(String methodName, final long startTime, long intervalInMillis) {
         this.methodName = methodName;
         this.interval = intervalInMillis;
         this.endOfInterval = now() + intervalInMillis;
         stats = new DescriptiveStatistics();
-        startTime = now();
+        if (startTime < 0) {
+            this.startTime = now();
+        } else {
+            this.startTime = startTime;
+        }
     }
 
     private long now() {
@@ -105,5 +113,6 @@ public class ObservedInterval {
     public double getP99() {
         return getStats().getPercentile(99);
     }
+
 
 }
