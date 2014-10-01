@@ -36,6 +36,9 @@ public class DatabaseMigrationHelper {
 
     public void upgradeDatabase() {
         try {
+            Properties configuration = new Properties();
+            configuration.setProperty("flyway.validateOnMigrate", "false");
+            flyway.configure(configuration);
             flyway.migrate();
         } catch (FlywayException e) {
             throw new ValuereporterTechnicalException("Database upgrade failed.", e,StatusType.RETRY_NOT_POSSIBLE);
