@@ -39,8 +39,9 @@ public class ObservedMethodDataMigration {
         log.info("Spring context initialized.");
 
         List<String> methodNames = findMethodsToParse(properties);
-        DateTime start = new DateTime(2014,9, 23, 0,0,0 );
-        DateTime end = new DateTime(2014,9, 24, 23,45,0 );
+        DateTime start = new DateTime(2014,9, 29, 0,0,0 );
+        //DateTime end = new DateTime(2014,6, 5, 9,45,0 );
+        DateTime end = new DateTime(2014,9, 29, 23,45,0 );
         //Do some work.
         migrator.createSummary(prefix, methodNames, start, end );
 
