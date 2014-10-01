@@ -9,8 +9,8 @@ GO
 
 CREATE TABLE [dbo].[ObservedMethod](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[prefix] [char](255) NOT NULL,
-	[methodName] [char](255) NOT NULL,
+	[prefix] [varchar](255) NOT NULL,
+	[methodName] [varchar](255) NOT NULL,
 	[startTime] [datetime] NOT NULL,
 	[endTime] [datetime] NOT NULL,
 	[duration] [int] NOT NULL,
