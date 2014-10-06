@@ -16,7 +16,9 @@
 <script type="text/javascript">
     var chart;
     $.getJSON('/reporter/observe/sla/interval/${model.prefix}?filter=${model.methodName}&from=${model.from}&to=${model.to}', function(data) {
-        var graphTitle='${model.methodName}';
+        var methodNames = '${model.methodName}'.split(".");
+        var niceNum=methodNames.length-2;
+        var graphTitle=methodNames[niceNum] + '.' + methodNames[niceNum+1];
 
         var line1=[];
         var mycategories=[];
