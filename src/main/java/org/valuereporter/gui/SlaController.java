@@ -19,6 +19,8 @@ public class SlaController {
 
     public static final String PREFIX = "prefix";
     public static final String METHOD_NAME = "methodName";
+    public static final String FROM = "from";
+    public static final String TO = "to";
 
     @RequestMapping("/sla")
     public ModelAndView showSlaGraph(@RequestParam(value = PREFIX, required = true) String prefix, @RequestParam(value = METHOD_NAME, required = true) String methodName) {
@@ -38,10 +40,17 @@ public class SlaController {
     }
 
     @RequestMapping("/slainterval")
-    public ModelAndView showSlaGraphInterval(@RequestParam(value = PREFIX, required = true) String prefix, @RequestParam(value = METHOD_NAME, required = true) String methodName) {
+    public ModelAndView showSlaGraphInterval(@RequestParam(value = PREFIX, required = true) String prefix, @RequestParam(value = METHOD_NAME, required = true) String methodName,
+                                             @RequestParam(value = FROM, required = false) Long from, @RequestParam(value = TO, required = false) String to) {
         Map model = new HashMap<String,String>();
         model.put(PREFIX, prefix);
         model.put(METHOD_NAME, methodName);
+        if (from != null) {
+            model.put(FROM, from);
+        }
+        if (to != null) {
+            model.put(TO, to);
+        }
         log.trace("Input prefix {}, methodName {}", prefix,methodName);
         return new ModelAndView("slainterval", "model", model);
     }

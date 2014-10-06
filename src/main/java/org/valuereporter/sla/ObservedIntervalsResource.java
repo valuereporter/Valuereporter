@@ -19,7 +19,7 @@ import java.util.List;
  * @author <a href="mailto:bard.lind@gmail.com">Bard Lind</a>
  */
 @Component
-@Path("/sla/observations")
+@Path("/sla/interval")
 public class ObservedIntervalsResource {
     private static final Logger log = LoggerFactory.getLogger(ObservedIntervalsResource.class);
 
@@ -33,7 +33,7 @@ public class ObservedIntervalsResource {
     }
 
     /**
-     * http://localhost:4901/reporter/observe/sla/observations/{prefix}?filter={methodName}&from=datetimeinmillis&to=datetimeinmillis
+     * http://localhost:4901/reporter/observe/sla/interval/{prefix}?filter={methodName}&from=datetimeinmillis&to=datetimeinmillis
      * @param prefix
      * @param filter
      * @return

@@ -15,10 +15,9 @@
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script type="text/javascript">
     var chart;
-   // var dill='${pageContext.request.contextPath}/graph/collection.json';
-   // var uptime_vs_in_use_url =  "/reporter/observe/observedmethods/${model.prefix}/${model.methodName}";
-    $.getJSON('/reporter/observe/observedmethods/${model.prefix}/${model.methodName}', function(data) {
-        var mySeries = [];
+    $.getJSON('/reporter/observe/sla/interval/${model.prefix}?filter=${model.methodName}&from=${model.from}&to=${model.to}', function(data) {
+       // var mySeries = [];
+        var graphTitle='${model.methodName}';
 
         var line1=[];
         var mycategories=[];
@@ -40,7 +39,9 @@
            // console.log("duration:" + entryvalue.duration);
             console.log("startTime: " + interval.startTime +", mean : " + interval.mean + ", max: " + interval.max + ", p95: " + interval.p95);
             mycategories.push(interval.startTime);
-            series[0].data.push(interval.duration);
+            series[0].data.push(interval.mean);
+            series[1].data.push(interval.max);
+            series[2].data.push(interval.p95);
            // line1.push([entryvalue.startTime, entryvalue.duration]);
         });
 
@@ -66,7 +67,7 @@
                 enabled: false
             },
             title: {
-                text: 'Service in-use'
+                text: graphTitle
             },
             xAxis: {
                 categories: mycategories,
