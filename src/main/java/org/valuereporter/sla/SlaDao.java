@@ -33,7 +33,7 @@ public class SlaDao {
         String sql = "select ok.prefix, ok.methodName, oi.duration,oi.startTime, oi.count, oi.max, oi.min, oi.mean, oi.median, oi.stdDev, oi.p95, oi.p98, oi.p99  \n" +
                 "   from ObservedInterval oi, ObservedKeys ok \n" +
                 "   where oi.startTime >= ? and oi.startTime <= ? and ok.prefix= ? and ok.methodName= ? and ok.id = oi.observedKeysId \n" +
-                "   order by oi.count desc, oi.max desc";
+                "   order by oi.startTime asc";
 
 
        // end = new DateTime(1411557199907L).plusDays(1);

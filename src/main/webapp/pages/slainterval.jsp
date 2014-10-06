@@ -7,7 +7,7 @@
 <body>
 <h2>SLA graph for ${model.prefix}</h2>
 <h4>${message}</h4>
-<div id="chart2" style="height:300px; width:500px;"></div>
+<div id="chart2" style="height:500px; width:800px;"></div>
 
 <script src="http://code.jquery.com/jquery.js"></script>
 <!--<script src="${pageContext.request.contextPath}/js/jquery-1.8.2.min.js"></script>  -->
@@ -20,8 +20,6 @@
         var niceNum=methodNames.length-2;
         var graphTitle=methodNames[niceNum] + '.' + methodNames[niceNum+1];
 
-        var line1=[];
-        var mycategories=[];
         var series=[
             {
                 name: 'Mean',
@@ -35,8 +33,7 @@
                 data: []
         }];
         data.forEach(function(interval){
-            console.log("startTime: " + interval.startTime +", mean : " + interval.mean + ", max: " + interval.max + ", p95: " + interval.p95);
-            //mycategories.push(interval.startTime);
+            //console.log("startTime: " + interval.startTime +", mean : " + interval.mean + ", max: " + interval.max + ", p95: " + interval.p95);
             series[0].data.push([interval.startTime,interval.mean]);
             series[2].data.push([interval.startTime,interval.p95]);
             series[1].data.push([interval.startTime,interval.max]);
@@ -47,10 +44,6 @@
                 type: 'spline',
                 zoomType: 'x'
             },
-            data: {
-                json: line1
-            },
-
             credits: {
                 enabled: false
             },
@@ -58,9 +51,8 @@
                 text: graphTitle
             },
             xAxis: {
-               // categories: mycategories,
                 type: 'datetime',
-                dateTimeLabelFormats: { // don't display the dummy year
+                dateTimeLabelFormats: {
                     month: '%e. %b',
                     year: '%b'
                 }
@@ -70,6 +62,11 @@
                     text: 'Responsetime (ms) '
                 },
                 min: 0
+            },
+            tooltip: {
+                shared: true,
+                crosshairs: true,
+                xDateFormat: '<b>%m/%d %H:%M</b>'
             },
             /*
             tooltip: {
