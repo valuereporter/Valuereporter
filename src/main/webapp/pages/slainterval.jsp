@@ -26,18 +26,18 @@
                 data: []
             },
             {
-                name: 'Max',
+                name: '95 percentile',
                 data: []
             }, {
-                name: '95 percentile',
+                name: 'Max',
                 data: []
         }];
         data.forEach(function(interval){
             console.log("startTime: " + interval.startTime +", mean : " + interval.mean + ", max: " + interval.max + ", p95: " + interval.p95);
-            mycategories.push(interval.startTime);
-            series[0].data.push(interval.mean);
-            series[1].data.push(interval.max);
-            series[2].data.push(interval.p95);
+            //mycategories.push(interval.startTime);
+            series[0].data.push([interval.startTime,interval.mean]);
+            series[2].data.push([interval.startTime,interval.p95]);
+            series[1].data.push([interval.startTime,interval.max]);
         });
 
         $('#chart2').highcharts({
@@ -56,7 +56,7 @@
                 text: graphTitle
             },
             xAxis: {
-                categories: mycategories,
+               // categories: mycategories,
                 type: 'datetime',
                 dateTimeLabelFormats: { // don't display the dummy year
                     month: '%e. %b',
@@ -69,6 +69,7 @@
                 },
                 min: 0
             },
+            /*
             tooltip: {
                 dateTimeLabelFormats: { // don't display the dummy year
                     second:" %d/%m %H:%M:%S",
@@ -78,8 +79,9 @@
                     month: '%e. %b',
                     year: '%b'
                 },
-                followPointer: false
+                followPointer: true
             },
+            */
             series: series
         });
 
