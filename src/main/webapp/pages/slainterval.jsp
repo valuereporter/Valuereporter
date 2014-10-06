@@ -5,7 +5,7 @@
 
 </head>
 <body>
-<h2>SLA graf for ${model.prefix}</h2>
+<h2>SLA graph for ${model.prefix}</h2>
 <h4>${message}</h4>
 <div id="chart2" style="height:300px; width:500px;"></div>
 
@@ -16,7 +16,6 @@
 <script type="text/javascript">
     var chart;
     $.getJSON('/reporter/observe/sla/interval/${model.prefix}?filter=${model.methodName}&from=${model.from}&to=${model.to}', function(data) {
-       // var mySeries = [];
         var graphTitle='${model.methodName}';
 
         var line1=[];
@@ -34,25 +33,12 @@
                 data: []
         }];
         data.forEach(function(interval){
-            // $.each(data, function (entrykey, entryvalue) {
-           // console.info("startTime:" + entryvalue.startTime);
-           // console.log("duration:" + entryvalue.duration);
             console.log("startTime: " + interval.startTime +", mean : " + interval.mean + ", max: " + interval.max + ", p95: " + interval.p95);
             mycategories.push(interval.startTime);
             series[0].data.push(interval.mean);
             series[1].data.push(interval.max);
             series[2].data.push(interval.p95);
-           // line1.push([entryvalue.startTime, entryvalue.duration]);
         });
-
-        /*
-        mySeries.push(
-                {name: '${model.methodName}',
-                    marker: {
-                        symbol: 'square'
-                    },
-                    data: line1});
-        */
 
         $('#chart2').highcharts({
             chart: {
