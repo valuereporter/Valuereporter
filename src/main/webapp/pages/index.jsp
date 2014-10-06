@@ -18,6 +18,7 @@
 
     <h3>SLA</h3>
    <li>SLA reporting: <a href="./gui/sla?prefix=template-prefix&methodName=org.valuereporter.Welcome.ping">SLA reporting on Welcome.ping</a></li>
+   <li>SLA Summary: <a href="./gui/slainterval?prefix=template-prefix&methodName=org.valuereporter.Welcome.ping">SLA reporting on Welcome.ping</a></li>
    <li>SLA rest: <a href="./observe/sla/observations/template-prefix?filter=org.valuereporter.Welcome.hello">http://localhost:4901/reporter/observe/sla/observations/{prefix}?filter={methodName}</a></li>
 
 </body>
