@@ -78,6 +78,10 @@ public class ObservationsRepository {
         return keysUpdated;
     }
 
+    public Map<String, PrefixCollection> getPrefixes() {
+        return prefixes;
+    }
+
     private void clearCollection(String prefix) {
         prefixes.remove(prefix);
     }
