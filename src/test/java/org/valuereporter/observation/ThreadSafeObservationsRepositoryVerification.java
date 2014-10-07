@@ -23,15 +23,22 @@ public class ThreadSafeObservationsRepositoryVerification {
         JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
         ObservationDao observationDao = new ObservationDaoStub(jdbcTemplate);
         ObservationsRepository repository = new ObservationsRepository(observationDao);
-        UpdateObservationsRunner firstObservations = new UpdateObservationsRunner(FIRST_METHOD, repository);
-        UpdateObservationsRunner secondObservations = new UpdateObservationsRunner(SECOND_METHOD, repository);
+        UpdateObservationsRunner firstObservationsA = new UpdateObservationsRunner(FIRST_METHOD, repository);
+        UpdateObservationsRunner secondObservationsA = new UpdateObservationsRunner(SECOND_METHOD, repository);
+        UpdateObservationsRunner firstObservationsB = new UpdateObservationsRunner(FIRST_METHOD, repository);
+        UpdateObservationsRunner secondObservationsB = new UpdateObservationsRunner(SECOND_METHOD, repository);
+
         PersistObservationsRunner persistObservations = new PersistObservationsRunner(PREFIX, repository);
-        firstObservations.start();
+        firstObservationsA.start();
+        secondObservationsA.start();
+        firstObservationsB.start();
+        secondObservationsB.start();
         persistObservations.start();
-        secondObservations.start();
         try {
-          firstObservations.join();
-          secondObservations.join();
+            firstObservationsA.join();
+            secondObservationsA.join();
+            firstObservationsB.join();
+            secondObservationsB.join();
             persistObservations.join();
         } catch (InterruptedException e) {
             log.warn("Interupted");
@@ -51,6 +58,7 @@ public class ThreadSafeObservationsRepositoryVerification {
         for (ObservedInterval interval : intervals) {
             log.info("ObserveInterval. name {}, count {} mean {} " , interval.getMethodName(), interval.getCount(), interval.getMean());
         }
+        repository.persistStatistics(PREFIX);
 
         log.info("-END-");
     }

@@ -114,5 +114,14 @@ public class ObservedInterval {
         return getStats().getPercentile(99);
     }
 
-
+    @Override
+    public String toString() {
+        return "ObservedInterval{" +
+                "methodName='" + methodName + '\'' +
+                ", interval=" + interval +
+                ", endOfInterval=" + endOfInterval +
+                ", startTime=" + startTime +
+                ", stats=" + stats +
+                '}';
+    }
 }

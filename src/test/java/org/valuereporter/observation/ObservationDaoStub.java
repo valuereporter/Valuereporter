@@ -19,8 +19,8 @@ public class ObservationDaoStub extends ObservationDao {
     public int[] updateStatistics(String prefix, List<ObservedInterval> intervals) {
 
         for (ObservedInterval interval : intervals) {
-            log.trace("updateStatistics {}, {}", prefix, interval.toString());
+            log.info("updateStatistics {}, {}, {}, {}", prefix, interval.getMethodName(), interval.getCount(), interval.getStartTime());
         }
-        return new int[0];
+        return new int[intervals.size()];
     }
 }

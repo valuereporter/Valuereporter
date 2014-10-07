@@ -21,7 +21,7 @@ public class PersistObservationsRunner extends Thread {
     public void run() {
         for (int i = 0; i < 10; i++) {
             try {
-                Thread.sleep((int)(Math.random() * 1000));
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 log.trace("Interupted {}", getName());
             }

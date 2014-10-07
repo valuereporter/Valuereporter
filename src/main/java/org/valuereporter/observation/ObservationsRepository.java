@@ -42,15 +42,19 @@ public class ObservationsRepository {
     public void persistStatistics(String prefix) {
         log.debug("persistStatistics starts");
         PrefixCollection prefixCollection = getCollection(prefix);
-        log.debug("Got prefixCollection {}", prefixCollection.toString());
-        List<ObservedInterval> intervals = prefixCollection.getIntervals();
-        log.debug("Got intervals size {}", intervals.size());
-        clearCollection(prefix);
-        log.debug("cleared collection");
-        int keysUpdated = updateMissingKeys(prefix, intervals);
-        log.trace("updated {} keys", keysUpdated);
-        int[] intervalsUpdated = observationDao.updateStatistics(prefix, intervals);
-        log.trace("updated {} intervals", intervalsUpdated);
+        if (prefixCollection != null) {
+           // log.debug("Got prefixCollection {}", prefixCollection.toString());
+            List<ObservedInterval> intervals = prefixCollection.getIntervals();
+            log.debug("Got intervals size {}", intervals.size());
+            clearCollection(prefix);
+            //log.debug("cleared collection");
+            int keysUpdated = updateMissingKeys(prefix, intervals);
+            //log.trace("updated {} keys", keysUpdated);
+            int[] intervalsUpdated = observationDao.updateStatistics(prefix, intervals);
+            log.trace("updated {} intervals", intervalsUpdated);
+        } else {
+            log.trace("PrefixCollection is null, nothing to presist.");
+        }
 
     }
 
@@ -69,7 +73,7 @@ public class ObservationsRepository {
             methodName = interval.getMethodName();
             if (!existingKeys.contains(methodName)) {
                 int count = observationDao.insertObservedKey(prefix, methodName);
-                    log.debug("Updated rows {} for prefix {}, methodName {}", count,prefix, methodName);
+                //log.debug("Updated rows {} for prefix {}, methodName {}", count,prefix, methodName);
                 keysUpdated =+ count;
             }
         }
