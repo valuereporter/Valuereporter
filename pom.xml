@@ -32,7 +32,7 @@
     <scm>
         <developerConnection>scm:git:ssh://git@github.com/altran/Valuereporter.git</developerConnection>
         <connection>scm:git:https://github.com/altran/Valuereporter.git</connection>
-        <url>https://github.com/altran/Valuereporter-Agent</url>
+        <url>https://github.com/altran/Valuereporter</url>
         <tag>HEAD</tag>
     </scm>
 
