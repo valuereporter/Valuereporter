@@ -65,7 +65,7 @@ public class ObservationsService implements QueryOperations, WriteOperations {
         return size;
     }
 
-    private void createScheduler(String prefix) {
+    void createScheduler(String prefix) {
         if (statisticsPersister == null) {
             long initialDelay = INITIAL_DELAY;
             long delayBetweenRuns = DELAY_BETWEEN_RUNS;
@@ -77,17 +77,19 @@ public class ObservationsService implements QueryOperations, WriteOperations {
             statisticsPersister = new StatisticsPersister(initialDelay, delayBetweenRuns, shutdownAfter);
         }
         statisticsPersister.startScheduler(observationsRepository, prefix);
+        scheduledPrefixes.add(prefix);
 
     }
 
-    private boolean isScheduled(String prefix) {
+    boolean isScheduled(String prefix) {
         return scheduledPrefixes.contains(prefix);
     }
 
-    private boolean isPersistMethodDetails() {
+    boolean isPersistMethodDetails() {
         return persistMethodDetails;
     }
-    private void doPersistMethodDetails(boolean persistMethodDetails) {
+
+    void doPersistMethodDetails(boolean persistMethodDetails) {
         if (persistMethodDetails) {
             log.info("Will persist every method call into the database.");
         } else {
@@ -96,7 +98,7 @@ public class ObservationsService implements QueryOperations, WriteOperations {
         this.persistMethodDetails = persistMethodDetails;
     }
 
-    List<ObservedMethod> getObservedMethods(String prefix, String name) {
+    public List<ObservedMethod> getObservedMethods(String prefix, String name) {
         List<ObservedMethod> observedMethods = observationDao.findObservedMethods(prefix, name);
         return observedMethods;
 
