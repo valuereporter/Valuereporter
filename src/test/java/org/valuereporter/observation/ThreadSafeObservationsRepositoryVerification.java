@@ -2,9 +2,11 @@ package org.valuereporter.observation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.mockito.Mockito.mock;
 
@@ -18,16 +20,19 @@ public class ThreadSafeObservationsRepositoryVerification {
 
     public static void main(String[] args) {
         log.info("-START-");
-        ObservationDao observationDao = mock(ObservationDao.class);
+        JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
+        ObservationDao observationDao = new ObservationDaoStub(jdbcTemplate);
         ObservationsRepository repository = new ObservationsRepository(observationDao);
-        FinTrans ft = new FinTrans();
-        UpdateObservationsRunner firstObservations = new UpdateObservationsRunner(FIRST_METHOD, repository, ft);
-        UpdateObservationsRunner secondObservations = new UpdateObservationsRunner(SECOND_METHOD, repository, ft);
+        UpdateObservationsRunner firstObservations = new UpdateObservationsRunner(FIRST_METHOD, repository);
+        UpdateObservationsRunner secondObservations = new UpdateObservationsRunner(SECOND_METHOD, repository);
+        PersistObservationsRunner persistObservations = new PersistObservationsRunner(PREFIX, repository);
         firstObservations.start();
+        persistObservations.start();
         secondObservations.start();
         try {
           firstObservations.join();
           secondObservations.join();
+            persistObservations.join();
         } catch (InterruptedException e) {
             log.warn("Interupted");
         }
@@ -35,8 +40,9 @@ public class ThreadSafeObservationsRepositoryVerification {
         //Child processes are finished.
         //Verify
         Map<String, PrefixCollection> prefixes = repository.getPrefixes();
-        log.info("Expect size of 1. Size is {}", prefixes.keySet().size());
-        for (String prefixKey : prefixes.keySet()) {
+        Set<String> keys = prefixes.keySet();
+        log.info("Expect size of 1. Size is {}", keys.size());
+        for (String prefixKey : keys) {
             log.info("Found prefix {}", prefixKey);
         }
 
