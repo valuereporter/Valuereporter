@@ -40,7 +40,7 @@ public class ObservationsRepository {
     }
 
     public void persistStatistics(String prefix) {
-        log.debug("persistStatistics starts");
+        log.trace("persistStatistics starts");
         PrefixCollection prefixCollection = getCollection(prefix);
         if (prefixCollection != null) {
            // log.debug("Got prefixCollection {}", prefixCollection.toString());
@@ -53,7 +53,7 @@ public class ObservationsRepository {
             int[] intervalsUpdated = observationDao.updateStatistics(prefix, intervals);
             log.trace("updated {} intervals", intervalsUpdated);
         } else {
-            log.trace("PrefixCollection is null, nothing to presist.");
+            log.trace("Nothing to presist.");
         }
 
     }
