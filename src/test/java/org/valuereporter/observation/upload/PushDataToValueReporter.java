@@ -58,7 +58,7 @@ public class PushDataToValueReporter {
         log.info("Connection to ValueReporter on {}" , observationUrl);
         final WebTarget observationTarget = client.target(observationUrl);
         //WebTarget webResource = findWebResourceByPrefix(prefix);
-        WebTarget webResource = observationTarget.path("implementedmethods").path(prefix);
+        WebTarget webResource = observationTarget.path("observedmethods").path(prefix);
         //String observedMethodsJson = mapper.writeValueAsString(observedMethods);
         log.trace("Forwarding implementedMethods as Json \n{}", implementedMethodsAsJson);
 
