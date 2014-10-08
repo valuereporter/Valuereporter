@@ -10,8 +10,8 @@ import java.util.Set;
 
 import static org.mockito.Mockito.mock;
 
-public class ThreadSafeObservationsRepositoryVerification {
-    private static final Logger log = LoggerFactory.getLogger(ThreadSafeObservationsRepositoryVerification.class);
+public class ThreadSafeObservationsServiceVerification {
+    private static final Logger log = LoggerFactory.getLogger(ThreadSafeObservationsServiceVerification.class);
     public static final String PREFIX = "MultiThreadVerification";
 
     public static final String FIRST_METHOD = "org.valuereporter.first.firstMethod";
@@ -21,14 +21,17 @@ public class ThreadSafeObservationsRepositoryVerification {
     public static void main(String[] args) {
         log.info("-START-");
         JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
-        ObservationDao observationDao = new ObservationDaoStub(jdbcTemplate);
+        ObservationDaoStub observationDao = new ObservationDaoStub(jdbcTemplate);
         ObservationsRepository repository = new ObservationsRepository(observationDao);
-        UpdateObservationsRunner firstObservationsA = new UpdateObservationsRunner(FIRST_METHOD, repository);
-        UpdateObservationsRunner secondObservationsA = new UpdateObservationsRunner(SECOND_METHOD, repository);
-        UpdateObservationsRunner firstObservationsB = new UpdateObservationsRunner(FIRST_METHOD, repository);
-        UpdateObservationsRunner secondObservationsB = new UpdateObservationsRunner(SECOND_METHOD, repository);
+        boolean persistAll = false;
+        int intervalInSec = 10;
+        ObservationsService observationsService = new ObservationsService(observationDao, repository,persistAll, intervalInSec);
+        UpdateObservationsToServiceRunner firstObservationsA = new UpdateObservationsToServiceRunner(FIRST_METHOD, observationsService);
+        UpdateObservationsToServiceRunner secondObservationsA = new UpdateObservationsToServiceRunner(SECOND_METHOD, observationsService);
+        UpdateObservationsToServiceRunner firstObservationsB = new UpdateObservationsToServiceRunner(FIRST_METHOD, observationsService);
+        UpdateObservationsToServiceRunner secondObservationsB = new UpdateObservationsToServiceRunner(SECOND_METHOD, observationsService);
 
-        PersistObservationsRunner persistObservations = new PersistObservationsRunner(PREFIX, repository);
+       // PersistObservationsRunner persistObservations = new PersistObservationsRunner(PREFIX, repository);
         firstObservationsA.start();
         secondObservationsA.start();
         firstObservationsB.start();
@@ -39,13 +42,14 @@ public class ThreadSafeObservationsRepositoryVerification {
             secondObservationsA.join();
             firstObservationsB.join();
             secondObservationsB.join();
-            persistObservations.join();
+//            persistObservations.join();
         } catch (InterruptedException e) {
             log.warn("Interupted");
         }
 
         //Child processes are finished.
         //Verify
+        log.info("Expect updateStatistics to be called more than once. Count: {}",observationDao.getUpdateStatisticsCount());
         Map<String, PrefixCollection> prefixes = repository.getPrefixes();
         Set<String> keys = prefixes.keySet();
         log.info("Expect size of 1. Size is {}", keys.size());

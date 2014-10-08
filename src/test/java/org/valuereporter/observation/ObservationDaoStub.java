@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class ObservationDaoStub extends ObservationDao {
     private static final Logger log = LoggerFactory.getLogger(ObservationDaoStub.class);
+    private int updateStatisticsCount = 0;
     public ObservationDaoStub(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
     }
@@ -19,8 +20,17 @@ public class ObservationDaoStub extends ObservationDao {
     public int[] updateStatistics(String prefix, List<ObservedInterval> intervals) {
 
         for (ObservedInterval interval : intervals) {
+            updateStatisticsCount();
             log.info("updateStatistics {}, {}, {}, {}", prefix, interval.getMethodName(), interval.getCount(), interval.getStartTime());
         }
         return new int[intervals.size()];
+    }
+
+    private synchronized void updateStatisticsCount() {
+        updateStatisticsCount = updateStatisticsCount +1;
+    }
+
+    public int getUpdateStatisticsCount() {
+        return updateStatisticsCount;
     }
 }
