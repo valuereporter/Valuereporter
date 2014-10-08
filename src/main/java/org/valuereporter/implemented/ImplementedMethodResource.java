@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.valuereporter.ValuereporterInputException;
+import org.valuereporter.helper.StatusType;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -113,7 +115,8 @@ public class ImplementedMethodResource {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+           log.warn("TODO: Handle messages in non-expected format.", e);
+            throw new ValuereporterInputException("Wrong data format on input.", StatusType.data_error);
         }
 
         long updatedCount = writeOperations.addImplementedMethods(implementedMethods);
