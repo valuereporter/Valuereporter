@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.valuereporter.helper.PropertiesHelper;
 import org.valuereporter.observation.ObservedMethod;
 import org.valuereporter.observation.ThreadSafeObservationsRepositoryVerification;
 
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author <a href="bard.lind@gmail.com">Bard Lind</a>
@@ -38,9 +40,10 @@ public class PushDataToValueReporter {
     public static void main(String[] args) {
 
         String loadPrefix = "PushDataToValueReporter";
-        String host = "localhost";
-
-        PushDataToValueReporter main = new PushDataToValueReporter(host, "4901", loadPrefix);
+        Properties resources = PropertiesHelper.findProperties();
+        String host = resources.getProperty("dataload.host");
+        String port = resources.getProperty("dataload.port");
+        PushDataToValueReporter main = new PushDataToValueReporter(host, port, loadPrefix);
         List<ObservedMethod> firstMethods = main.getFirstMethods();
         List<ObservedMethod> secondMethods = main.getSecondMethods();
         try {
