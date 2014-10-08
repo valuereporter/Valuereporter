@@ -25,7 +25,7 @@ public class ObservationsService implements QueryOperations, WriteOperations {
     private int intervalSeconds = -1;
     private List<ObservedMethod> observedMethodsChache;
     private ObservationDao observationDao;
-    private boolean persistMethodDetails = false;
+    private final boolean persistMethodDetails; // = false;
     private List<String> scheduledPrefixes = new ArrayList<>();
     private StatisticsPersister statisticsPersister = null;
 
@@ -33,7 +33,8 @@ public class ObservationsService implements QueryOperations, WriteOperations {
     public ObservationsService(ObservationDao observationDao, ObservationsRepository observationsRepository, @Value("${observation.methods.detailed}") boolean persistMethodDetails, @Value("${observation.interval.seconds}") int intervalSeconds  ) {
         this.observationDao = observationDao;
         this.observationsRepository = observationsRepository;
-        doPersistMethodDetails(persistMethodDetails);
+        this.persistMethodDetails = persistMethodDetails;
+        reportPersistDetails();
         if (intervalSeconds > 0) {
             this.intervalSeconds = intervalSeconds;
         }
@@ -65,7 +66,7 @@ public class ObservationsService implements QueryOperations, WriteOperations {
         return size;
     }
 
-    void createScheduler(String prefix) {
+    synchronized void createScheduler(String prefix) {
         if (statisticsPersister == null) {
             long initialDelay = INITIAL_DELAY;
             long delayBetweenRuns = DELAY_BETWEEN_RUNS;
@@ -81,21 +82,21 @@ public class ObservationsService implements QueryOperations, WriteOperations {
 
     }
 
-    boolean isScheduled(String prefix) {
+    synchronized boolean isScheduled(String prefix) {
         return scheduledPrefixes.contains(prefix);
     }
 
-    boolean isPersistMethodDetails() {
+    synchronized boolean isPersistMethodDetails() {
         return persistMethodDetails;
     }
 
-    void doPersistMethodDetails(boolean persistMethodDetails) {
+    private void reportPersistDetails() {
         if (persistMethodDetails) {
             log.info("Will persist every method call into the database.");
         } else {
             log.info("Will only persist summary information of methods, to the database.");
         }
-        this.persistMethodDetails = persistMethodDetails;
+
     }
 
     public List<ObservedMethod> getObservedMethods(String prefix, String name) {
