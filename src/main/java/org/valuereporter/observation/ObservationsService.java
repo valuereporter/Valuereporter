@@ -11,6 +11,8 @@ import org.valuereporter.scheduler.StatisticsPersister;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author <a href="bard.lind@gmail.com">Bard Lind</a>
@@ -26,7 +28,7 @@ public class ObservationsService implements QueryOperations, WriteOperations {
     private List<ObservedMethod> observedMethodsChache;
     private ObservationDao observationDao;
     private final boolean persistMethodDetails; // = false;
-    private List<String> scheduledPrefixes = new ArrayList<>();
+    private ConcurrentMap<String, StatisticsPersister> scheduledPrefixes = new ConcurrentHashMap<>();
     private StatisticsPersister statisticsPersister = null;
 
     @Autowired
@@ -78,12 +80,17 @@ public class ObservationsService implements QueryOperations, WriteOperations {
             statisticsPersister = new StatisticsPersister(initialDelay, delayBetweenRuns, shutdownAfter);
         }
         statisticsPersister.startScheduler(observationsRepository, prefix);
-        scheduledPrefixes.add(prefix);
+        scheduledPrefixes.put(prefix, statisticsPersister);
 
     }
 
     synchronized boolean isScheduled(String prefix) {
-        return scheduledPrefixes.contains(prefix);
+        boolean isScheduled = false;
+        if (scheduledPrefixes.get(prefix) != null) {
+            //TODO And secure that the scheduler is active.
+            isScheduled = true;
+        }
+        return isScheduled;
     }
 
     synchronized boolean isPersistMethodDetails() {

@@ -30,6 +30,7 @@ public class ObservedMethodsResouce {
     private final WriteOperations writeOperations;
     private final ObjectMapper mapper;
 
+
     /**
     @Autowired
     public ObservedMethodsResouce(QueryOperations queryOperations, WriteOperations writeOperations, ObjectMapper mapper) {
@@ -95,7 +96,8 @@ public class ObservedMethodsResouce {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn("Unexpected error trying to produce list of ObservedMethod from \n prefix {} \n json {}, \n Reason {}",prefix, jsonBody, e.getMessage());
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Error converting to requested format.").build();
         }
 
         long updatedCount = writeOperations.addObservations(prefix,observedMethods);
