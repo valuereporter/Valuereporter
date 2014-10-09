@@ -45,6 +45,11 @@
             series[2].data.push([interval.startTime,interval.p95]);
             series[3].data.push([interval.startTime,interval.max]);
         });
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
 
         $('#chart2').highcharts({
             chart: {
