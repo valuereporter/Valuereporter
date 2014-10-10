@@ -24,7 +24,7 @@ public class ObservationsService implements QueryOperations, WriteOperations {
     private static final long INITIAL_DELAY = MINUTES_15;
     private static final long DELAY_BETWEEN_RUNS = MINUTES_15;
     private final ObservationsRepository observationsRepository;
-    private int intervalSeconds = -1;
+    private long intervalSeconds = -1;
     private List<ObservedMethod> observedMethodsChache;
     private ObservationDao observationDao;
     private final boolean persistMethodDetails; // = false;
@@ -59,7 +59,7 @@ public class ObservationsService implements QueryOperations, WriteOperations {
             if (!isScheduled(prefix)) {
                 createScheduler(prefix);
             }
-            observationsRepository.updateStatistics(prefix, observedMethods);
+            observationsRepository.updateStatistics(prefix, intervalSeconds, observedMethods);
             if (isPersistMethodDetails()) {
                 observationDao.addAll(prefix, observedMethods);
             }

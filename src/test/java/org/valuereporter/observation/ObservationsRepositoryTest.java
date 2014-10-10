@@ -31,8 +31,8 @@ public class ObservationsRepositoryTest {
     public static void testObservationsRepositoryAddAndPersist() {
         ObservationDao observationDaoMock = mock(ObservationDao.class);
         ObservationsRepository repository = new ObservationsRepository(observationDaoMock);
-        repository.updateStatistics(PREFIX,observedMethodsStubs());
-        PrefixCollection prefixCollection = repository.getCollection(PREFIX);
+        repository.updateStatistics(PREFIX,1L,observedMethodsStubs());
+        PrefixCollection prefixCollection = repository.getCollection(PREFIX,1L);
         List<ObservedInterval> intervalls = prefixCollection.getIntervals();
         assertEquals(intervalls.size(),1);
         repository.persistAndResetStatistics(PREFIX,1L);
@@ -43,13 +43,13 @@ public class ObservationsRepositoryTest {
     public static void verifyCollectionIsCleared() {
         ObservationDao observationDaoMock = mock(ObservationDao.class);
         ObservationsRepository repository = new ObservationsRepository(observationDaoMock);
-        repository.updateStatistics(PREFIX,observedMethodsStubs());
-        PrefixCollection prefixCollection = repository.getCollection(PREFIX);
+        repository.updateStatistics(PREFIX,1L,observedMethodsStubs());
+        PrefixCollection prefixCollection = repository.getCollection(PREFIX,1L);
         log.debug("Collection size before {}", prefixCollection.getIntervals().size());
         List<ObservedInterval> intervalls = prefixCollection.getIntervals();
         assertEquals(intervalls.size(), 1);
         repository.persistAndResetStatistics(PREFIX,1L);
-        assertNull(repository.getCollection(PREFIX));
+        assertNull(repository.getCollection(PREFIX,1L));
     }
 
     private static List<ObservedMethod> observedMethodsStubs() {

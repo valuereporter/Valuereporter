@@ -54,8 +54,8 @@ public class ObservationsRepositoryManualTest extends AbstractTestNGSpringContex
 
 
     public void testObservationsRepositoryAddAndPersist() {
-        repository.updateStatistics(PREFIX,observedMethodsStubs());
-        PrefixCollection prefixCollection = repository.getCollection(PREFIX);
+        repository.updateStatistics(PREFIX,1L,observedMethodsStubs());
+        PrefixCollection prefixCollection = repository.getCollection(PREFIX, 1L);
         List<ObservedInterval> intervalls = prefixCollection.getIntervals();
         repository.persistAndResetStatistics(PREFIX, 1L);
     }

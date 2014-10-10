@@ -25,8 +25,8 @@ public class ObservationsRepository {
         this.observationDao = observationDao;
     }
 
-    public void updateStatistics(String prefix, List<ObservedMethod> methods) {
-        PrefixCollection prefixCollection = getCollection(prefix);
+    public void updateStatistics(String prefix, Long intervalInSec,List<ObservedMethod> methods) {
+        PrefixCollection prefixCollection = getCollection(prefix, intervalInSec);
 
         for (ObservedMethod method : methods) {
             prefixCollection.updateStatistics(method);
@@ -39,38 +39,17 @@ public class ObservationsRepository {
      * @return Will always return a prefixCollection, unless prefix is null or empty
      * @throws IllegalArgumentException If prefix is null or empty.
      */
-    synchronized PrefixCollection getCollection(String prefix) throws IllegalArgumentException{
+    synchronized PrefixCollection getCollection(String prefix, long intervalInSec) throws IllegalArgumentException{
         if (prefix == null || prefix.isEmpty()) {
             throw new IllegalArgumentException("Prefix may not be null, nor empty.");
         }
         PrefixCollection prefixCollection;
         if (!prefixes.containsKey(prefix)) {
-            prefixCollection = new PrefixCollection(prefix);
+            prefixCollection = new PrefixCollection(prefix, intervalInSec);
             prefixes.putIfAbsent(prefix, prefixCollection);
         }
         prefixCollection = prefixes.get(prefix);
         return prefixCollection;
-    }
-
-    @Deprecated
-    public synchronized void persistStatistics(String prefix) {
-        log.trace("persistStatistics starts");
-        PrefixCollection prefixCollection = getCollection(prefix);
-        if (prefixCollection != null) {
-           // log.debug("Got prefixCollection {}", prefixCollection.toString());
-            List<ObservedInterval> intervals = prefixCollection.getIntervals();
-            log.debug("Got intervals size {}", intervals.size());
-           // clearCollection(prefix);
-
-            //log.debug("cleared collection");
-            int keysUpdated = updateMissingKeys(prefix, intervals);
-            //log.trace("updated {} keys", keysUpdated);
-            int intervalsUpdated = observationDao.updateStatistics(prefix, intervals);
-            log.trace("updated {} intervals", intervalsUpdated);
-        } else {
-            log.trace("Nothing to presist.");
-        }
-
     }
 
     public synchronized void persistAndResetStatistics(String prefix, long intervalInSec) {

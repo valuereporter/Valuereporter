@@ -28,14 +28,14 @@ public class UpdateObservationsRunner extends Thread {
                 } catch (InterruptedException e) {
                     log.trace("Interupted {}", getName());
                 }
-                observationsRepository.updateStatistics(PREFIX, getFirstMethods());
+                observationsRepository.updateStatistics(PREFIX, 1L,getFirstMethods());
             } else {
                 try {
                     Thread.sleep((int)(Math.random() * 1000));
                 } catch (InterruptedException e) {
                     log.trace("Interupted {}", getName());
                 }
-                observationsRepository.updateStatistics(PREFIX,getSecondMethods());
+                observationsRepository.updateStatistics(PREFIX,1L,getSecondMethods());
             }
         }
     }
