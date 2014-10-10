@@ -23,7 +23,7 @@ public class StatisticsPersisterTest {
         StatisticsPersister persister = new StatisticsPersister(1,1,3);
         persister.startScheduler(repository, "testprefix");
         Thread.sleep(1500);
-        verify(repository).persistStatistics(eq("testprefix"));
+        verify(repository).persistAndResetStatistics(eq("testprefix"), eq(1L));
 
     }
 

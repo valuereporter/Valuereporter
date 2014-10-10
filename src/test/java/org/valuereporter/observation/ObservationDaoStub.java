@@ -17,13 +17,13 @@ public class ObservationDaoStub extends ObservationDao {
     }
 
     @Override
-    public int[] updateStatistics(String prefix, List<ObservedInterval> intervals) {
+    public int updateStatistics(String prefix, List<ObservedInterval> intervals) {
 
         for (ObservedInterval interval : intervals) {
             updateStatisticsCount();
             log.info("updateStatistics {}, {}, {}, {}", prefix, interval.getMethodName(), interval.getCount(), interval.getStartTime());
         }
-        return new int[intervals.size()];
+        return intervals.size();
     }
 
     private synchronized void updateStatisticsCount() {

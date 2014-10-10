@@ -25,7 +25,7 @@ public class PersistObservationsRunner extends Thread {
             } catch (InterruptedException e) {
                 log.trace("Interupted {}", getName());
             }
-            observationsRepository.persistStatistics(prefix);
+            observationsRepository.persistAndResetStatistics(prefix,1L);
         }
     }
 }

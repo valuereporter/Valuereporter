@@ -58,7 +58,7 @@ public class ThreadSafeObservationsRepositoryVerification {
         for (ObservedInterval interval : intervals) {
             log.info("ObserveInterval. name {}, count {} mean {} " , interval.getMethodName(), interval.getCount(), interval.getMean());
         }
-        repository.persistStatistics(PREFIX);
+        repository.persistAndResetStatistics(PREFIX, 1L);
 
         log.info("-END-");
     }

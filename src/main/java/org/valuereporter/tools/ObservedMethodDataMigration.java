@@ -76,8 +76,8 @@ public class ObservedMethodDataMigration {
             log.trace("Found {} intervals.", observedIntervals.size());
             if (observedIntervals.size() > 0) {
                 countIntervals = countIntervals + observedIntervals.size();
-                int[] countStat = observationDao.updateStatistics(prefix, observedIntervals);
-                log.trace("Updated interval to statistics. count: {}" + countStat.length);
+                int countStat = observationDao.updateStatistics(prefix, observedIntervals);
+                log.trace("Updated interval to statistics. count: {}" + countStat);
             }
             prefixCollection = new PrefixCollection(prefix);
             //Loop for next interval.

@@ -35,7 +35,7 @@ public class ObservationsRepositoryTest {
         PrefixCollection prefixCollection = repository.getCollection(PREFIX);
         List<ObservedInterval> intervalls = prefixCollection.getIntervals();
         assertEquals(intervalls.size(),1);
-        repository.persistStatistics(PREFIX);
+        repository.persistAndResetStatistics(PREFIX,1L);
         verify(observationDaoMock).updateStatistics(eq(PREFIX), eq(intervalls));
     }
 
@@ -48,7 +48,7 @@ public class ObservationsRepositoryTest {
         log.debug("Collection size before {}", prefixCollection.getIntervals().size());
         List<ObservedInterval> intervalls = prefixCollection.getIntervals();
         assertEquals(intervalls.size(), 1);
-        repository.persistStatistics(PREFIX);
+        repository.persistAndResetStatistics(PREFIX,1L);
         assertNull(repository.getCollection(PREFIX));
     }
 

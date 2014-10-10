@@ -147,7 +147,7 @@ public class ObservationDao {
 
     }
 
-    public int[] updateStatistics(final String prefix, final List<ObservedInterval> intervals) {
+    public synchronized int updateStatistics(final String prefix, final List<ObservedInterval> intervals) {
         log.trace("Calling update statistics. prefix {}, intervals count {}", prefix, intervals.size());
 
         String sql = "insert into ObservedInterval (observedKeysId, startTime, duration, count, max, min, mean, median, stdDev, p95, p98, p99)\n" +
@@ -186,7 +186,7 @@ public class ObservationDao {
             }
         });
 
-        return intervalsUpdated;
+        return intervalsUpdated.length;
 
         /*
         String sql = "insert into ObservedInterval (observedKeysId, startTime, duration, count, max, min, mean, median, stdDev, p95, p98, p99)\n" +

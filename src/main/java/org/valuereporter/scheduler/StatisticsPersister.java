@@ -47,7 +47,7 @@ public class StatisticsPersister {
         @Override
         public void run() {
             log.trace("Persist prefix {}", prefix);
-            repository.persistStatistics(prefix);
+            repository.persistAndResetStatistics(prefix, delayBetweenRuns);
         }
 
     }

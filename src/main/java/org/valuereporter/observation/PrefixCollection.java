@@ -11,17 +11,17 @@ import java.util.concurrent.ConcurrentMap;
 public class PrefixCollection {
 
     private final String prefix;
-    private final long interval;
+    private final long intervalInSec;
     private ConcurrentMap<String, ObservedInterval> intervals = new ConcurrentHashMap<>();
     private final long defaultInterval = 5 * 1000;
 
     public PrefixCollection(String prefix) {
         this.prefix = prefix;
-        this.interval = defaultInterval;
+        this.intervalInSec = defaultInterval;
     }
 
-    public PrefixCollection(String prefix, long duration) {
-        this.interval = duration;
+    public PrefixCollection(String prefix, long intervalInSec) {
+        this.intervalInSec = intervalInSec;
         this.prefix = prefix;
     }
 
@@ -29,7 +29,7 @@ public class PrefixCollection {
         ObservedInterval observedInterval;
         if (method != null) {
             if (!intervals.containsKey(method.getName())) {
-                observedInterval = new ObservedInterval(method.getName(), interval);
+                observedInterval = new ObservedInterval(method.getName(), intervalInSec);
                 intervals.putIfAbsent(method.getName(), observedInterval);
             }
             observedInterval = intervals.get(method.getName());

@@ -52,6 +52,7 @@ public class ObservationsRepository {
         return prefixCollection;
     }
 
+    @Deprecated
     public synchronized void persistStatistics(String prefix) {
         log.trace("persistStatistics starts");
         PrefixCollection prefixCollection = getCollection(prefix);
@@ -59,12 +60,12 @@ public class ObservationsRepository {
            // log.debug("Got prefixCollection {}", prefixCollection.toString());
             List<ObservedInterval> intervals = prefixCollection.getIntervals();
             log.debug("Got intervals size {}", intervals.size());
-            clearCollection(prefix);
+           // clearCollection(prefix);
 
             //log.debug("cleared collection");
             int keysUpdated = updateMissingKeys(prefix, intervals);
             //log.trace("updated {} keys", keysUpdated);
-            int[] intervalsUpdated = observationDao.updateStatistics(prefix, intervals);
+            int intervalsUpdated = observationDao.updateStatistics(prefix, intervals);
             log.trace("updated {} intervals", intervalsUpdated);
         } else {
             log.trace("Nothing to presist.");
@@ -72,11 +73,28 @@ public class ObservationsRepository {
 
     }
 
-    synchronized List<ObservedInterval> fetchAndClear(String prefix, long duration) {
-        PrefixCollection newInterval = new PrefixCollection(prefix, duration);
+    public synchronized void persistAndResetStatistics(String prefix, long intervalInSec) {
+        log.trace("persistStatistics starts");
+        List<ObservedInterval> intervals = fetchAndClear(prefix, intervalInSec);
+        if (intervals.size() > 0) {
+            // log.debug("Got prefixCollection {}", prefixCollection.toString());
+            log.debug("Got intervals size {}", intervals.size());
+            int keysUpdated = updateMissingKeys(prefix, intervals);
+            log.trace("updated {} keys", keysUpdated);
+            int intervalsUpdated = observationDao.updateStatistics(prefix, intervals);
+            log.trace("updated {} intervals", intervalsUpdated);
+        } else {
+            log.trace("Nothing to presist.");
+        }
+
+    }
+
+    synchronized List<ObservedInterval> fetchAndClear(String prefix, long intervalInSec) {
+        PrefixCollection newInterval = new PrefixCollection(prefix, intervalInSec);
         PrefixCollection harvestedStats = prefixes.get(prefix);
-       //TODO
-        return null;
+        prefixes.replace(prefix,newInterval);
+        List<ObservedInterval> statisticalIntervals = harvestedStats.getIntervals();
+        return statisticalIntervals;
     }
 
     private int updateMissingKeys(String prefix, List<ObservedInterval> intervals) {
