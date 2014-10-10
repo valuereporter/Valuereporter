@@ -1,9 +1,9 @@
 package org.valuereporter.observation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author <a href="mailto:bard.lind@gmail.com">Bard Lind</a>
@@ -11,20 +11,30 @@ import java.util.Map;
 public class PrefixCollection {
 
     private final String prefix;
-    private Map<String, ObservedInterval> intervals = new HashMap<>();
+    private final long interval;
+    private ConcurrentMap<String, ObservedInterval> intervals = new ConcurrentHashMap<>();
     private final long defaultInterval = 5 * 1000;
 
     public PrefixCollection(String prefix) {
         this.prefix = prefix;
+        this.interval = defaultInterval;
+    }
+
+    public PrefixCollection(String prefix, long duration) {
+        this.interval = duration;
+        this.prefix = prefix;
     }
 
     public void updateStatistics(ObservedMethod method) {
-        ObservedInterval observedInterval = intervals.get(method.getName());
-        if (observedInterval == null) {
-            observedInterval = new ObservedInterval(method.getName(), defaultInterval);
-            intervals.put(method.getName(), observedInterval);
+        ObservedInterval observedInterval;
+        if (method != null) {
+            if (!intervals.containsKey(method.getName())) {
+                observedInterval = new ObservedInterval(method.getName(), interval);
+                intervals.putIfAbsent(method.getName(), observedInterval);
+            }
+            observedInterval = intervals.get(method.getName());
+            observedInterval.updateStatistics(method);
         }
-        observedInterval.updateStatistics(method);
     }
 
     public void updateStatistics(ObservedMethod method, long startTime, long interval) {

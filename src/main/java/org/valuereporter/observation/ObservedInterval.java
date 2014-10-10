@@ -10,7 +10,7 @@ public class ObservedInterval {
     private final long interval;
     private final long endOfInterval;
     private final long startTime;
-    private DescriptiveStatistics stats;
+    private final DescriptiveStatistics stats;
 
     public ObservedInterval(String methodName, long intervalInMillis) {
        this(methodName, -1, intervalInMillis);
@@ -32,34 +32,12 @@ public class ObservedInterval {
         return System.currentTimeMillis();
     }
 
-    public void observed(ObservedMethod method) {
-        updateStatistics(method);
-        /*
-        if (now() > endOfInterval){
-            //Report to database
-//TODO move to repository
-            //Flush the data
-            flushData();
-        } else {
-           updateStatistics(method);
-        }
-        */
-
-    }
-
-    void updateStatistics(ObservedMethod method) {
+    synchronized void updateStatistics(ObservedMethod method) {
         getStats().addValue(method.getDuration());
     }
 
     private DescriptiveStatistics getStats() {
-        if (stats == null) {
-            stats = new DescriptiveStatistics();
-        }
         return stats;
-    }
-
-    void flushData() {
-        stats = new DescriptiveStatistics();
     }
 
     public String getMethodName() {

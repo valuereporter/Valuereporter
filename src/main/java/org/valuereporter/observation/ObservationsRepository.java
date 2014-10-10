@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author <a href="bard.lind@gmail.com">Bard Lind</a>
@@ -17,7 +18,7 @@ import java.util.Map;
 public class ObservationsRepository {
     private static final Logger log = LoggerFactory.getLogger(ObservationsRepository.class);
     private ObservationDao observationDao;
-    private Map<String, PrefixCollection> prefixes = new HashMap();
+    private ConcurrentMap<String, PrefixCollection> prefixes = new ConcurrentHashMap<>();
 
     @Autowired
     public ObservationsRepository(ObservationDao observationDao) {
@@ -26,20 +27,32 @@ public class ObservationsRepository {
 
     public void updateStatistics(String prefix, List<ObservedMethod> methods) {
         PrefixCollection prefixCollection = getCollection(prefix);
-        if (prefixCollection == null) {
-            prefixCollection = new PrefixCollection(prefix);
-            prefixes.put(prefix, prefixCollection);
-        }
+
         for (ObservedMethod method : methods) {
             prefixCollection.updateStatistics(method);
         }
     }
 
-    PrefixCollection getCollection(String prefix) {
-        return prefixes.get(prefix);
+    /**
+     *
+     * @param prefix
+     * @return Will always return a prefixCollection, unless prefix is null or empty
+     * @throws IllegalArgumentException If prefix is null or empty.
+     */
+    synchronized PrefixCollection getCollection(String prefix) throws IllegalArgumentException{
+        if (prefix == null || prefix.isEmpty()) {
+            throw new IllegalArgumentException("Prefix may not be null, nor empty.");
+        }
+        PrefixCollection prefixCollection;
+        if (!prefixes.containsKey(prefix)) {
+            prefixCollection = new PrefixCollection(prefix);
+            prefixes.putIfAbsent(prefix, prefixCollection);
+        }
+        prefixCollection = prefixes.get(prefix);
+        return prefixCollection;
     }
 
-    public void persistStatistics(String prefix) {
+    public synchronized void persistStatistics(String prefix) {
         log.trace("persistStatistics starts");
         PrefixCollection prefixCollection = getCollection(prefix);
         if (prefixCollection != null) {
@@ -47,6 +60,7 @@ public class ObservationsRepository {
             List<ObservedInterval> intervals = prefixCollection.getIntervals();
             log.debug("Got intervals size {}", intervals.size());
             clearCollection(prefix);
+
             //log.debug("cleared collection");
             int keysUpdated = updateMissingKeys(prefix, intervals);
             //log.trace("updated {} keys", keysUpdated);
@@ -56,6 +70,13 @@ public class ObservationsRepository {
             log.trace("Nothing to presist.");
         }
 
+    }
+
+    synchronized List<ObservedInterval> fetchAndClear(String prefix, long duration) {
+        PrefixCollection newInterval = new PrefixCollection(prefix, duration);
+        PrefixCollection harvestedStats = prefixes.get(prefix);
+       //TODO
+        return null;
     }
 
     private int updateMissingKeys(String prefix, List<ObservedInterval> intervals) {
