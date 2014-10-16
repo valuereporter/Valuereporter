@@ -14,6 +14,11 @@
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script type="text/javascript">
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
     var chart;
     $.getJSON('/reporter/observe/sla/interval/${model.prefix}?filter=${model.methodName}&from=${model.from}&to=${model.to}', function(data) {
         var methodNames = '${model.methodName}'.split(".");
@@ -44,11 +49,6 @@
             series[1].data.push([interval.startTime,interval.mean]);
             series[2].data.push([interval.startTime,interval.p95]);
             series[3].data.push([interval.startTime,interval.max]);
-        });
-        Highcharts.setOptions({
-            global: {
-                useUTC: false
-            }
         });
 
         $('#chart2').highcharts({
