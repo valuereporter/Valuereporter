@@ -12,7 +12,7 @@
 <script src="http://code.jquery.com/jquery.js"></script>
 <!--<script src="${pageContext.request.contextPath}/js/jquery-1.8.2.min.js"></script>  -->
 <script src="http://code.highcharts.com/highcharts.js"></script>
-<%--<script src="http://code.highcharts.com/modules/exporting.js"></script>--%>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script type="text/javascript">
     var chart;
     $.getJSON('/reporter/observe/sla/interval/${model.prefix}?filter=${model.methodName}&from=${model.from}&to=${model.to}', function(data) {
@@ -69,12 +69,35 @@
                     year: '%b'
                 }
             },
-            yAxis: {
+            yAxis: [{ // Primary yAxis
+                labels: {
+                    format: '{value} ',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
                 title: {
-                    text: 'Responsetime (ms) '
+                    text: 'Count pr 15 minutes',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
                 },
                 min: 0
-            },
+            }, { // Secondary yAxis
+                title: {
+                    text: 'Responsetime (ms)',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                labels: {
+                    format: '{value} ',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                opposite: true
+            }],
             tooltip: {
                 shared: true,
                 crosshairs: true,
