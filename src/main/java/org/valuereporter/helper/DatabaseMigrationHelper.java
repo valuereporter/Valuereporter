@@ -24,6 +24,7 @@ public class DatabaseMigrationHelper {
         try {
             DataSource masterDs = createMasterDataSource(resources);
             flyway = new Flyway();
+            flyway.setValidateOnMigrate(false);
             flyway.setDataSource(masterDs);
         } catch (Exception e) {
             ValuereporterTechnicalException tte = new ValuereporterTechnicalException("Error migrating the database. Please verify properties are in place " +
