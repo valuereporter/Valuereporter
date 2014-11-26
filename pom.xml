@@ -33,7 +33,6 @@
         <developerConnection>scm:git:ssh://git@github.com/altran/Valuereporter.git</developerConnection>
         <connection>scm:git:https://github.com/altran/Valuereporter.git</connection>
         <url>https://github.com/altran/Valuereporter</url>
-        <tag>valuereporter-0.4.4</tag>
     </scm>
 
     <repositories>
