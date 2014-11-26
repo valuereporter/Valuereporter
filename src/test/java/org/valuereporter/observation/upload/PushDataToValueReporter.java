@@ -86,16 +86,17 @@ public class PushDataToValueReporter {
         long startTime = endTime - 1000;
         long duration = 1000;
         firstMethods.add(new ObservedMethod(prefix, ThreadSafeObservationsRepositoryVerification.FIRST_METHOD, startTime, endTime, duration));
+        firstMethods.add(new ObservedMethod(prefix, ThreadSafeObservationsRepositoryVerification.FIRST_METHOD, startTime, endTime, duration));
         return firstMethods;
     }
 
     List<ObservedMethod> getSecondMethods() {
-        List<ObservedMethod> firstMethods = new ArrayList<>();
+        List<ObservedMethod> secondMethods = new ArrayList<>();
         long endTime = System.currentTimeMillis();
         long startTime = endTime - 200;
         long duration = 200;
-        firstMethods.add(new ObservedMethod(prefix, ThreadSafeObservationsRepositoryVerification.SECOND_METHOD, startTime, endTime, duration));
-        return firstMethods;
+        secondMethods.add(new ObservedMethod(prefix, ThreadSafeObservationsRepositoryVerification.SECOND_METHOD, startTime, endTime, duration));
+        return secondMethods;
     }
 
 }
