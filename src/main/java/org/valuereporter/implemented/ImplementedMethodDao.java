@@ -80,4 +80,11 @@ public class ImplementedMethodDao {
         }
         return inserted;
     }
+
+    public List<String> findImplementedPrefixes() {
+        String sql = "SELECT DISTINCT prefix FROM ImplementedMethod;";
+        List<String> implementedMethods = jdbcTemplate.queryForList(sql, String.class);
+        return implementedMethods;
+
+    }
 }
