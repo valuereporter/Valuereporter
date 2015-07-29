@@ -136,11 +136,11 @@ public class EmbeddedDatabaseHelper {
                 "      observedKeysId bigint NOT NULL ,\n" +
                 "      startTime datetime NOT NULL,\n" +
                 "      duration bigint not null,\n" +
-                "      \"count\" bigint NOT NULL,\n" +
-                "      \"max\" bigint not null,\n" +
-                "      \"min\" bigint not null,\n" +
-                "      \"mean\" decimal not null,\n" +
-                "      \"median\" decimal not null,\n" +
+                "      vrCount bigint NOT NULL,\n" +
+                "      vrMax bigint not null,\n" +
+                "      vrMin bigint not null,\n" +
+                "      vrMean decimal not null,\n" +
+                "      vrMedian decimal not null,\n" +
                 "      stdDev decimal not null,\n" +
                 "      p95 decimal,\n" +
                 "      p98 decimal,\n" +
@@ -182,7 +182,7 @@ public class EmbeddedDatabaseHelper {
             queryRunner.update(connection, "insert into ObservedMethod (prefix,methodName, startTime, endTime, duration) values ('inital', 'com.valuereporter.test', '2014-05-13 12:02:43.296','2014-05-13 12:02:43.596',300);");
             queryRunner.update(connection, "insert into ImplementedMethod (prefix,methodName) values ('inital', 'com.valuereporter.test');");
             queryRunner.update(connection, "insert into ObservedKeys(prefix, methodName) values ('initial', 'com.valuereporter.test');");
-            queryRunner.update(connection, "insert into ObservedInterval (observedKeysId, startTime, duration, \"count\", \"max\", \"mean\",\"min\",\"median\", stdDev)\n" +
+            queryRunner.update(connection, "insert into ObservedInterval (observedKeysId, startTime, duration, vrCount, vrMax, vrMean,vrMin,vrMedian, stdDev)\n" +
                 "      select o.id, '2014-05-13 12:02:43.296', 15*60*1000, 4, 50, 5.0, 2,0,0\n" +
                 "      from ObservedKeys o\n" +
                 "      where prefix='initial' and methodName = 'com.valuereporter.test';");
