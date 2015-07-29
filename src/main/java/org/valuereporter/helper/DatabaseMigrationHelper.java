@@ -39,11 +39,20 @@ public class DatabaseMigrationHelper {
         try {
             Properties configuration = new Properties();
             configuration.setProperty("flyway.validateOnMigrate", "false");
+            String sqlLocations = buildSqlMigrationLocations();
+            configuration.setProperty("flyway.locations", sqlLocations);
             flyway.configure(configuration);
             flyway.migrate();
         } catch (FlywayException e) {
             throw new ValuereporterTechnicalException("Database upgrade failed.", e,StatusType.RETRY_NOT_POSSIBLE);
         }
+    }
+
+    private String buildSqlMigrationLocations() {
+        String defaultLocations = "db/migration";
+        String locations = defaultLocations;
+        return locations;
+
     }
 
     public void cleanDatabase() {

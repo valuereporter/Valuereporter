@@ -13,6 +13,7 @@
     <h3>Observations</h3>
     <li><a href="./observe/observedmethods/{prefix}/{name}">template listing of operations (./observe/observedmethods/{prefix}/{name})</a></li>
     <b>Ping and Hello test</b>
+    <li><a href="./observe/observedmethods/initial/com.valuereporter.test">Initial Data</a> </li>
     <li><a href="./observe/observedmethods/template-prefix/org.valuereporter.Welcome.ping">Ping</a>
     <li><a href="./observe/observedmethods/template-prefix/org.valuereporter.Welcome.hello">Helo</a>
 
