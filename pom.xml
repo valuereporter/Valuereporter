@@ -6,7 +6,7 @@
     <version>0.9.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>valuereporter</name>
+    <name>vr-valuereporter</name>
     <description>javaagent monitoring activities in your application. This information is forwarded to Valuereporter via http.</description>
 
     <url>http://www.valuereporter.org</url>
@@ -30,9 +30,9 @@
     </parent>
 
     <scm>
-        <developerConnection>scm:git:ssh://git@github.com/cantara/Valuereporter.git</developerConnection>
-        <connection>scm:git:https://github.com/cantara/Valuereporter.git</connection>
-        <url>https://github.com/cantara/Valuereporter</url>
+        <developerConnection>scm:git:ssh://git@github.com/valuereporter/Valuereporter.git</developerConnection>
+        <connection>scm:git:https://github.com/valuereporter/Valuereporter.git</connection>
+        <url>https://github.com/valuereporter/Valuereporter</url>
       <tag>HEAD</tag>
   </scm>
 
@@ -48,7 +48,7 @@
 
 
     <properties>
-        <service.name>valuereporter</service.name>
+        <service.name>vr-valuereporter</service.name>
         <slf4j.version>1.7.7</slf4j.version>
         <spring.version>4.3.17.RELEASE</spring.version>
         <jetty.version>9.1.4.v20140401</jetty.version>
@@ -584,7 +584,7 @@
         </dependency>
         <dependency>
             <groupId>org.valuereporter</groupId>
-            <artifactId>valuereporter-agent</artifactId>
+            <artifactId>vr-valuereporter-agent</artifactId>
             <version>0.6</version>
             <scope>test</scope>
         </dependency>
